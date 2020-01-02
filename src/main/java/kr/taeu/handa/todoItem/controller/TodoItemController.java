@@ -4,19 +4,23 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.taeu.handa.todoItem.domain.TodoItem;
+import kr.taeu.handa.todoItem.dto.TodoItemDto;
+import kr.taeu.handa.todoItem.dto.TodoItemDto.Res;
 import kr.taeu.handa.todoItem.service.TodoItemService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class TodoItemController {
-	@Autowired
-	private TodoItemService todoItemService;
+	private final TodoItemService todoItemService;
 	
 	@GetMapping(value="/api/status")
 	public String isRunning() {
@@ -29,10 +33,11 @@ public class TodoItemController {
 		return todoItemService.list();
 	}
 	
-	@GetMapping(value="/api/item/write")
-	public List<TodoItem> write(HttpServletRequest req) {
+	@PostMapping(value="/api/item/write")
+	public Res write(@RequestBody final TodoItemDto.WriteReq dto, HttpServletRequest req) {
+		log.info(dto.toEntity().getContent());
 		log.info("call api from " + req.getRemoteAddr());
-		return todoItemService.list();
+		return new TodoItemDto.Res(todoItemService.write(dto));
 	}
 	
 	@GetMapping(value="/api/item/modify")

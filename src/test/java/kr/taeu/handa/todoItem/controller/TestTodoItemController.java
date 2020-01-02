@@ -37,9 +37,4 @@ public class TestTodoItemController {
 				.andExpect(status().isOk())
 				.andExpect(content().string("상태 : Alive"));
 	}
-	
-	@Test
-	public void List_요청() throws Exception{
-		
-	}
 }

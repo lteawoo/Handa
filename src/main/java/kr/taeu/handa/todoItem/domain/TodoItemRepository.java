@@ -1,8 +1,6 @@
-package kr.taeu.handa.todoItem.repository;
+package kr.taeu.handa.todoItem.domain;
 
 import org.springframework.data.repository.CrudRepository;
-
-import kr.taeu.handa.todoItem.domain.TodoItem;
 
 public interface TodoItemRepository extends CrudRepository<TodoItem, Long>{
 
