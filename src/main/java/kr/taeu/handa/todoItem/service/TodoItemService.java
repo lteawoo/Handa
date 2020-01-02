@@ -1,6 +1,7 @@
 package kr.taeu.handa.todoItem.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,18 @@ public class TodoItemService {
 		return (List<TodoItem>)todoItemRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
+	public TodoItem findById(long id) {
+		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
+		todoItem.or
+	}
+	
 	public TodoItem write(TodoItemDto.WriteReq dto) {
 		return todoItemRepository.save(dto.toEntity());
+	}
+	
+	public TodoItem modify(TodoItemDto.ModifyReq dto) {
+		final TodoItem todoItem = 
+		
 	}
 }

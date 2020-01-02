@@ -28,6 +28,20 @@ public class TodoItemDto {
 	}
 	
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class ModifyReq {
+		private Long id;
+		private String content;
+		private boolean done;
+		
+		@Builder
+		public ModifyReq(String content, boolean done) {
+			this.content = content;
+			this.done = done;
+		}
+	}
+	
+	@Getter
 	public static class Res {
 		private String content;
 		private boolean done;

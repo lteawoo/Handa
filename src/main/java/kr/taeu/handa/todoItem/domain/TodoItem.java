@@ -1,7 +1,6 @@
 package kr.taeu.handa.todoItem.domain;
 
-import java.io.Serializable;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -21,7 +19,8 @@ public class TodoItem{
 	
 	@Id	@GeneratedValue
 	private Long id;
-
+	
+	@Column(length = 500, nullable = false)
 	private String content;
 	
 	private boolean done;
