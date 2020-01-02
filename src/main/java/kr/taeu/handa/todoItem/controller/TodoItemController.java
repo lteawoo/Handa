@@ -2,8 +2,6 @@ package kr.taeu.handa.todoItem.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,15 +26,12 @@ public class TodoItemController {
 	}
 	
 	@GetMapping(value="/api/item/list")
-	public List<TodoItem> list(HttpServletRequest req) {
-		log.info("call api from " + req.getRemoteAddr());
+	public List<TodoItem> list() {
 		return todoItemService.list();
 	}
 	
 	@PostMapping(value="/api/item/write")
-	public Res write(@RequestBody final TodoItemDto.WriteReq dto, HttpServletRequest req) {
-		log.info(dto.toEntity().getContent());
-		log.info("call api from " + req.getRemoteAddr());
+	public Res write(@RequestBody final TodoItemDto.WriteReq dto) {
 		return new TodoItemDto.Res(todoItemService.write(dto));
 	}
 	
