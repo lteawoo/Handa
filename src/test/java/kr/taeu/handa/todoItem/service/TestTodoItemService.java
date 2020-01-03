@@ -2,6 +2,8 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
@@ -84,6 +86,35 @@ public class TestTodoItemService {
 		assertEquals(list.get(0), todoItem1);
 		assertEquals(list.get(1), todoItem2);
 		assertEquals(list.get(2), todoItem3);
+	}
+	
+	@Test
+	public void 아이템_수정() {
+		//given
+		final TodoItemDto.ModifyContentReq modifyContentReq = buildModfiyContentReq("내용 변경 테스트!");
+		final TodoItemDto.ModifyDoneReq modifyDoneReq = buildModfiyDoneReq(true);
+		given(repo.findById(1L)).willReturn(Optional.of(list.get(0)));
+		given(repo.findById(2L)).willReturn(Optional.of(list.get(1)));
+		
+		//when
+		final TodoItem todoItem1 = this.service.modifyContent(1L, modifyContentReq);
+		final TodoItem todoItem2 = this.service.modifyDone(2L, modifyDoneReq);
+		
+		//then
+		assertEquals(modifyContentReq.getContent(), todoItem1.getContent());
+		assertEquals(modifyDoneReq.isDone(), todoItem2.isDone());
+	}
+	
+	private TodoItemDto.ModifyContentReq buildModfiyContentReq(String content) {
+		return TodoItemDto.ModifyContentReq.builder()
+				.content(content)
+				.build();
+	}
+	
+	private TodoItemDto.ModifyDoneReq buildModfiyDoneReq(boolean done) {
+		return TodoItemDto.ModifyDoneReq.builder()
+				.done(done)
+				.build();
 	}
 	
 	@Test

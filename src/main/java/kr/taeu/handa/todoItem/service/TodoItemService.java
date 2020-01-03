@@ -33,7 +33,6 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public TodoItem findById(long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
-		log.info("findById service || param_id="+ id + ", id=" + todoItem.get().getId());
 		//todoItem.orElse();
 		return todoItem.get();
 	}
