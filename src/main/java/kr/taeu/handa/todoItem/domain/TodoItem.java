@@ -21,7 +21,7 @@ public class TodoItem{
 //	private String email;
 	
 	@Id	@GeneratedValue
-	private Long id;
+	private long id;
 	
 	@Column(length = 500, nullable = false)
 	private String content;

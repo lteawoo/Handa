@@ -33,7 +33,7 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public TodoItem findById(long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
-		log.info(todoItem.toString());
+		log.info("findById service || param_id="+ id + ", id=" + todoItem.get().getId());
 		//todoItem.orElse();
 		return todoItem.get();
 	}
@@ -52,5 +52,9 @@ public class TodoItemService {
 		final TodoItem todoItem = findById(id);
 		todoItem.modifyDone(dto);
 		return todoItem;
+	}
+	
+	public void delete(long id) {
+		todoItemRepository.deleteById(id);
 	}
 }

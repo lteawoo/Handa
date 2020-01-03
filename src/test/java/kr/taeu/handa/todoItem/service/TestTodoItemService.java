@@ -2,8 +2,11 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,75 +14,86 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
+import kr.taeu.handa.todoItem.dto.TodoItemDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ExtendWith(MockitoExtension.class)
 public class TestTodoItemService {
-	List<TodoItem> items;
+	
+	@InjectMocks
 	TodoItemService service;
+	
+	@Mock
 	TodoItemRepository repo;
+
+	List<TodoItem> list;
 	
 	@BeforeEach
 	public void setUp() {
-		//given
-		this.items = new ArrayList<TodoItem>();
-		
-		TodoItem item;
-		
-		item = TodoItem.builder()
-				.content("바나나를 먹어야해")
-				.done(false)
+		list = new ArrayList<TodoItem>();
+		list.add(buildWriteReq("바나나를 먹어야해", false).toEntity());
+		list.add(buildWriteReq("딸기를 먹어야해", false).toEntity());
+		list.add(buildWriteReq("호일을 사야해", true).toEntity());
+	}
+	
+	private TodoItemDto.WriteReq buildWriteReq(String content, boolean done) {
+		return TodoItemDto.WriteReq.builder()
+				.content(content)
+				.done(done)
 				.build();
-		this.items.add(item);
-		
-		item = TodoItem.builder()
-				.content("호일을 사야해")
-				.done(false)
-				.build();
-		this.items.add(item);
-		
-		item = TodoItem.builder()
-				.content("커밋 해야해")
-				.done(false)
-				.build();
-		this.items.add(item);
-		
-		this.repo = mock(TodoItemRepository.class);
-		when(this.repo.findAll()).thenReturn(this.items);
-		when(this.repo.findById(1L)).thenReturn(Optional.of(this.items.get(0)));
-		when(this.repo.findById(2L)).thenReturn(Optional.of(this.items.get(1)));
-		when(this.repo.findById(3L)).thenReturn(Optional.of(this.items.get(2)));
-		
-		this.service = new TodoItemService(this.repo);
 	}
 	
 	@Test
 	public void 모든_아이템_조회() {
-		List<TodoItem> list = new ArrayList<TodoItem>();
+		//given
+		given(this.repo.findAll()).willReturn(list);
 		
 		//when
-		list = this.service.list();
+		final List<TodoItem> listByService = this.service.list();
 		
 		//then
-		assertIterableEquals(list, this.items);
+		verify(repo, atLeastOnce()).findAll();
+		assertIterableEquals(list, listByService);
+	}
+
+	@Test
+	public void 개별_아이템_조회() {
+		//given
+		given(this.repo.findById(1L)).willReturn(Optional.of(list.get(0)));
+		given(this.repo.findById(2L)).willReturn(Optional.of(list.get(1)));
+		given(this.repo.findById(3L)).willReturn(Optional.of(list.get(2)));
+		
+		//when
+		final TodoItem todoItem1 = this.service.findById(1);
+		final TodoItem todoItem2 = this.service.findById(2);
+		final TodoItem todoItem3 = this.service.findById(3);
+		
+		//then
+		verify(repo, atLeastOnce()).findById(anyLong());
+		
 	}
 	
 	@Test
-	public void 개별_아이템_조회() {
-		TodoItem a, b;
+	public void 아이템_삭제() {
+		//given
+		TodoItem todoItem = this.service.findById(3);
 		
-		for(int index = 0; index < items.size(); index++) {
-			a = items.get(index);
-			b = this.service.findById(index + 1);
-			compare(a, b);
-		}
+		//when
+		this.service.delete(3);
+		
+		//then
+		assertEquals(this.service.list().contains(todoItem), true);
 	}
-	
-	private void compare(TodoItem a, TodoItem b) {
-		assertEquals(a.getId(), b.getId());
+
+	private void compare(TodoItemDto.WriteReq a, TodoItem b) {
 		assertEquals(a.getContent(), b.getContent());
 		assertEquals(a.isDone(), b.isDone());
 	}

@@ -51,7 +51,7 @@ public class TodoItemDto {
 	
 	@Getter
 	public static class Res {
-		private Long id;
+		private long id;
 		private String content;
 		private boolean done;
 		
