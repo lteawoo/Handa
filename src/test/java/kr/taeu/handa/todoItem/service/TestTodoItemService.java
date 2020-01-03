@@ -2,6 +2,7 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -120,12 +121,14 @@ public class TestTodoItemService {
 	@Test
 	public void 아이템_삭제() {
 		//given
-		TodoItem todoItem = this.service.findById(3);
+		given(repo.findById(1L)).willReturn(Optional.of(list.get(0)));
+		TodoItem todoItem = this.service.findById(1L);
 		
 		//when
-		this.service.delete(3);
+		this.service.delete(1L);
 		
 		//then
-		assertEquals(this.service.list().contains(todoItem), true);
+		assertEquals(false, this.service.list().stream()
+				.anyMatch(m -> m.getId() == todoItem.getId()));
 	}
 }
