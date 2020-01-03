@@ -1,6 +1,7 @@
 package kr.taeu.handa.todoItem.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class TestTodoItemRepository {
 	}
 	
 	@Test
-	public void 아이템_저장_불러오기() {
+	public void 아이템_저장_삭제_불러오기() {
 		//given
 		todoItemRepository.save(TodoItem.builder()
 				.content("바나나를 먹자")
@@ -40,6 +41,7 @@ public class TestTodoItemRepository {
 				.content("오늘도 커밋하자")
 				.done(false)
 				.build());
+		todoItemRepository.deleteById(3L);
 		
 		//when
 		List<TodoItem> itemList = (List<TodoItem>) todoItemRepository.findAll();
@@ -49,7 +51,6 @@ public class TestTodoItemRepository {
 		assertEquals("바나나를 먹자", item.getContent());
 		item = itemList.get(1);
 		assertEquals("호일을 사자", item.getContent());
-		item = itemList.get(2);
-		assertEquals("오늘도 커밋하자", item.getContent());
+		assertEquals(2, itemList.size());
 	}
 }
