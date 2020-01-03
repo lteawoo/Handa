@@ -33,6 +33,7 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public TodoItem findById(long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
+		log.info(todoItem.toString());
 		//todoItem.orElse();
 		return todoItem.get();
 	}
@@ -41,14 +42,14 @@ public class TodoItemService {
 		return todoItemRepository.save(dto.toEntity());
 	}
 	
-	public TodoItem modifyContent(ModifyContentReq dto) {
-		final TodoItem todoItem = findById(dto.getId());
+	public TodoItem modifyContent(long id, ModifyContentReq dto) {
+		final TodoItem todoItem = findById(id);
 		todoItem.modifyContent(dto);
 		return todoItem;
 	}
 	
-	public TodoItem modifyDone(ModifyDoneReq dto) {
-		final TodoItem todoItem = findById(dto.getId());
+	public TodoItem modifyDone(long id, ModifyDoneReq dto) {
+		final TodoItem todoItem = findById(id);
 		todoItem.modifyDone(dto);
 		return todoItem;
 	}

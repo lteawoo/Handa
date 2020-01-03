@@ -1,6 +1,7 @@
 package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,7 +14,9 @@ import org.junit.jupiter.api.Test;
 
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TestTodoItemService {
 	List<TodoItem> items;
 	TodoItemService service;
@@ -61,7 +64,7 @@ public class TestTodoItemService {
 		list = this.service.list();
 		
 		//then
-		assertEquals(list, this.items);
+		assertIterableEquals(list, this.items);
 	}
 	
 	@Test

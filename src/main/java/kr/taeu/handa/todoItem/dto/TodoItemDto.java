@@ -30,7 +30,6 @@ public class TodoItemDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class ModifyContentReq {
-		private Long id;
 		private String content;
 		
 		@Builder
@@ -42,7 +41,6 @@ public class TodoItemDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class ModifyDoneReq {
-		private Long id;
 		private boolean done;
 		
 		@Builder
