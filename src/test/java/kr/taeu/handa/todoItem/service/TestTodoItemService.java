@@ -2,11 +2,11 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,9 @@ public class TestTodoItemService {
 
 	List<TodoItem> list;
 	
+	/*
+	 * repository 데이터를 대신할 테스트 데이터 생성
+	 */
 	@BeforeEach
 	public void setUp() {
 		list = new ArrayList<TodoItem>();
@@ -77,8 +80,10 @@ public class TestTodoItemService {
 		final TodoItem todoItem3 = this.service.findById(3);
 		
 		//then
-		verify(repo, atLeastOnce()).findById(anyLong());
-		
+		verify(repo, times(3)).findById(anyLong());
+		assertEquals(list.get(0), todoItem1);
+		assertEquals(list.get(1), todoItem2);
+		assertEquals(list.get(2), todoItem3);
 	}
 	
 	@Test
@@ -91,10 +96,5 @@ public class TestTodoItemService {
 		
 		//then
 		assertEquals(this.service.list().contains(todoItem), true);
-	}
-
-	private void compare(TodoItemDto.WriteReq a, TodoItem b) {
-		assertEquals(a.getContent(), b.getContent());
-		assertEquals(a.isDone(), b.isDone());
 	}
 }
