@@ -29,24 +29,36 @@ public class TodoItemDto {
 	
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
-	public static class ModifyReq {
+	public static class ModifyContentReq {
 		private Long id;
 		private String content;
+		
+		@Builder
+		public ModifyContentReq(String content) {
+			this.content = content;
+		}
+	}
+	
+	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class ModifyDoneReq {
+		private Long id;
 		private boolean done;
 		
 		@Builder
-		public ModifyReq(String content, boolean done) {
-			this.content = content;
+		public ModifyDoneReq(boolean done) {
 			this.done = done;
 		}
 	}
 	
 	@Getter
 	public static class Res {
+		private Long id;
 		private String content;
 		private boolean done;
 		
 		public Res(TodoItem todoItem) {
+			this.id = todoItem.getId();
 			this.content = todoItem.getContent();
 			this.done = todoItem.isDone();
 		}

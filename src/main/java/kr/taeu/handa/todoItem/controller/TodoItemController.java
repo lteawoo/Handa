@@ -35,9 +35,14 @@ public class TodoItemController {
 		return new TodoItemDto.Res(todoItemService.write(dto));
 	}
 	
-	@PostMapping(value="/api/item/modify")
-	public TodoItemDto.Res modify(@PathVariable final long id, @RequestBody final TodoItemDto.ModifyReq dto) {
-		return new TodoItemDto.Res(todoItemService.)
+	@PostMapping(value="/api/item/modifyContent/{id}")
+	public TodoItemDto.Res modifyContent(@PathVariable final long id, @RequestBody final TodoItemDto.ModifyContentReq dto) {
+		return new TodoItemDto.Res(todoItemService.modifyContent(dto));
+	}
+	
+	@PostMapping(value="/api/item/modifyDone/{id}")
+	public TodoItemDto.Res modifyDone(@PathVariable final long id, @RequestBody final TodoItemDto.ModifyDoneReq dto) {
+		return new TodoItemDto.Res(todoItemService.modifyDone(dto));
 	}
 	
 	@GetMapping(value="/api/item/delete")

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
+import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyContentReq;
+import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyDoneReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,15 +33,23 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public TodoItem findById(long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
-		todoItem.or
+		//todoItem.orElse();
+		return todoItem.get();
 	}
 	
 	public TodoItem write(TodoItemDto.WriteReq dto) {
 		return todoItemRepository.save(dto.toEntity());
 	}
 	
-	public TodoItem modify(TodoItemDto.ModifyReq dto) {
-		final TodoItem todoItem = 
-		
+	public TodoItem modifyContent(ModifyContentReq dto) {
+		final TodoItem todoItem = findById(dto.getId());
+		todoItem.modifyContent(dto);
+		return todoItem;
+	}
+	
+	public TodoItem modifyDone(ModifyDoneReq dto) {
+		final TodoItem todoItem = findById(dto.getId());
+		todoItem.modifyDone(dto);
+		return todoItem;
 	}
 }
