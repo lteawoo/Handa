@@ -5,17 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import kr.taeu.handa.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyContentReq;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyDoneReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@ToString
 public class TodoItem{
 //	@Id
 //	private String email;

@@ -23,11 +23,12 @@ public class TodoItemService {
 	
 	@Transactional(readOnly = true)
 	public List<TodoItem> list() {
-		todoItemRepository.findAll().forEach(item->{
+		List<TodoItem> todoItemList = (List<TodoItem>) todoItemRepository.findAll();
+		todoItemList.forEach(item->{
 			log.info(item.toString());
 		});
 		
-		return (List<TodoItem>)todoItemRepository.findAll();
+		return todoItemList;
 	}
 	
 	@Transactional(readOnly = true)

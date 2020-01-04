@@ -2,6 +2,7 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
@@ -63,16 +64,16 @@ public class TestTodoItemService {
 		final List<TodoItem> listByService = this.service.list();
 		
 		//then
-		verify(repo, atLeastOnce()).findAll();
-		assertIterableEquals(list, listByService);
+		verify(this.repo, atLeastOnce()).findAll();
+		assertIterableEquals(this.list, listByService);
 	}
 
 	@Test
 	public void 개별_아이템_조회() {
 		//given
-		given(this.repo.findById(1L)).willReturn(Optional.of(list.get(0)));
-		given(this.repo.findById(2L)).willReturn(Optional.of(list.get(1)));
-		given(this.repo.findById(3L)).willReturn(Optional.of(list.get(2)));
+		given(this.repo.findById(1L)).willReturn(Optional.of(this.list.get(0)));
+		given(this.repo.findById(2L)).willReturn(Optional.of(this.list.get(1)));
+		given(this.repo.findById(3L)).willReturn(Optional.of(this.list.get(2)));
 		
 		//when
 		final TodoItem todoItem1 = this.service.findById(1);
@@ -80,10 +81,10 @@ public class TestTodoItemService {
 		final TodoItem todoItem3 = this.service.findById(3);
 		
 		//then
-		verify(repo, times(3)).findById(anyLong());
-		assertEquals(list.get(0), todoItem1);
-		assertEquals(list.get(1), todoItem2);
-		assertEquals(list.get(2), todoItem3);
+		verify(this.repo, times(3)).findById(anyLong());
+		assertEquals(this.list.get(0), todoItem1);
+		assertEquals(this.list.get(1), todoItem2);
+		assertEquals(this.list.get(2), todoItem3);
 	}
 	
 	@Test
@@ -91,14 +92,18 @@ public class TestTodoItemService {
 		//given
 		final TodoItemDto.ModifyContentReq modifyContentReq = buildModfiyContentReq("내용 변경 테스트!");
 		final TodoItemDto.ModifyDoneReq modifyDoneReq = buildModfiyDoneReq(true);
-		given(repo.findById(1L)).willReturn(Optional.of(list.get(0)));
-		given(repo.findById(2L)).willReturn(Optional.of(list.get(1)));
+		given(this.repo.findById(1L)).willReturn(Optional.of(this.list.get(0)));
+		given(this.repo.findById(2L)).willReturn(Optional.of(this.list.get(1)));
+		given(this.repo.save(this.list.get(0))).willReturn(modifyContentReq.toEntity());
+		given(this.repo.save(this.list.get(1))).willReturn(modifyDoneReq.toEntity());
 		
 		//when
 		final TodoItem todoItem1 = this.service.modifyContent(1L, modifyContentReq);
 		final TodoItem todoItem2 = this.service.modifyDone(2L, modifyDoneReq);
 		
 		//then
+		verify(this.repo, times(2)).findById(anyLong());
+		verify(this.repo, times(2)).save(any());
 		assertEquals(modifyContentReq.getContent(), todoItem1.getContent());
 		assertEquals(modifyDoneReq.isDone(), todoItem2.isDone());
 	}

@@ -36,6 +36,12 @@ public class TodoItemDto {
 		public ModifyContentReq(String content) {
 			this.content = content;
 		}
+		
+		public TodoItem toEntity() {
+			return TodoItem.builder()
+					.content(this.content)
+					.build();
+		}
 	}
 	
 	@Getter
@@ -46,6 +52,12 @@ public class TodoItemDto {
 		@Builder
 		public ModifyDoneReq(boolean done) {
 			this.done = done;
+		}
+		
+		public TodoItem toEntity() {
+			return TodoItem.builder()
+					.done(this.done)
+					.build();
 		}
 	}
 	
