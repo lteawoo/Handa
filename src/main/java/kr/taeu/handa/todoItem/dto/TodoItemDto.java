@@ -1,5 +1,7 @@
 package kr.taeu.handa.todoItem.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +12,7 @@ public class TodoItemDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class WriteReq {
+		@NotEmpty
 		private String content;
 		private boolean done;
 		
@@ -30,6 +33,7 @@ public class TodoItemDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class ModifyContentReq {
+		@NotEmpty
 		private String content;
 		
 		@Builder
