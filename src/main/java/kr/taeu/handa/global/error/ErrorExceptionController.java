@@ -3,16 +3,13 @@ package kr.taeu.handa.global.error;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import kr.taeu.handa.todoItem.exception.BusinessException;
-import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;
+import kr.taeu.handa.global.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice

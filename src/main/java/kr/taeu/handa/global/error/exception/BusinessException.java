@@ -1,4 +1,4 @@
-package kr.taeu.handa.todoItem.exception;
+package kr.taeu.handa.global.error.exception;
 
 import kr.taeu.handa.global.error.ErrorCode;
 import lombok.Getter;
