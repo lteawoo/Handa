@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ErrorExceptionController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.error(e.getMessage());
+		log.error("handleMethodArgumentNotValidException", e);
 		final BindingResult bindingResult = e.getBindingResult();
 		final List<FieldError> errors = bindingResult.getFieldErrors();
 		
@@ -31,6 +31,9 @@ public class ErrorExceptionController {
 					.collect(Collectors.toList()));
 	}
 	
+	/**
+	 * 비즈니스 로직에서의 에러 검출 시 발생
+	 */
 	@ExceptionHandler(BusinessException.class)
 	protected ErrorResponse handleBusinessException(final BusinessException e) {
 		log.error("handleBusinessException", e);
