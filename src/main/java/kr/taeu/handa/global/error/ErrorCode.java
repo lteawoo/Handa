@@ -1,4 +1,4 @@
-package kr.taeu.handa.error;
+package kr.taeu.handa.global.error;
 
 import lombok.Getter;
 

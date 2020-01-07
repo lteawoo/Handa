@@ -1,4 +1,4 @@
-package kr.taeu.handa.error;
+package kr.taeu.handa.global.error;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import kr.taeu.handa.todoItem.Exception.BusinessException;
-import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
+import kr.taeu.handa.todoItem.exception.BusinessException;
+import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice

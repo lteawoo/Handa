@@ -1,4 +1,4 @@
-package kr.taeu.handa.config;
+package kr.taeu.handa.global.config;
 
 import javax.sql.DataSource;
 

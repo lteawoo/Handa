@@ -21,11 +21,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import kr.taeu.handa.error.ErrorCode;
-import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
+import kr.taeu.handa.global.error.ErrorCode;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
+import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

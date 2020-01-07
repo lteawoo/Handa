@@ -1,6 +1,6 @@
-package kr.taeu.handa.todoItem.Exception;
+package kr.taeu.handa.todoItem.exception;
 
-import kr.taeu.handa.error.ErrorCode;
+import kr.taeu.handa.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
