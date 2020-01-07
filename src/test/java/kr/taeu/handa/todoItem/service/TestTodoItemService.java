@@ -2,6 +2,7 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -20,6 +21,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import kr.taeu.handa.error.ErrorCode;
+import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
@@ -132,5 +135,20 @@ public class TestTodoItemService {
 		//then
 		assertEquals(false, this.service.list().stream()
 				.anyMatch(m -> m.getId() == todoItem.getId()));
+	}
+	
+	@Test
+	public void 없는_아이템_조회() {
+		//given
+		given(repo.findById(any())).willReturn(Optional.empty());
+		
+		//when
+		//this.service.findById(1L);
+		TodoItemNotFoundException thrown = assertThrows(
+				TodoItemNotFoundException.class,
+				() -> this.service.findById(1L));
+		
+		//then
+		assertEquals(ErrorCode.TODOITEM_NOT_FOUND, thrown.getMessage());
 	}
 }

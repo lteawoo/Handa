@@ -1,12 +1,10 @@
 package kr.taeu.handa.todoItem.Exception;
 
-import lombok.Getter;
+import kr.taeu.handa.error.ErrorCode;
 
-@Getter
-public class TodoItemNotFoundException extends RuntimeException {
-	private long id;
+public class TodoItemNotFoundException extends BusinessException {
 	
 	public TodoItemNotFoundException(long id) {
-		this.id = id;
+		super("TodoItem id=" + id, ErrorCode.TODOITEM_NOT_FOUND);		
 	}
 }

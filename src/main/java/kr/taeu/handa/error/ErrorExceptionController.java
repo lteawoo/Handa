@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import kr.taeu.handa.todoItem.Exception.BusinessException;
 import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ErrorExceptionController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.error(e.getMessage());
 		final BindingResult bindingResult = e.getBindingResult();
@@ -34,12 +34,10 @@ public class ErrorExceptionController {
 					.collect(Collectors.toList()));
 	}
 	
-	@ExceptionHandler(TodoItemNotFoundException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ErrorResponse handleTodoItemNotFoundException(TodoItemNotFoundException e) {
-		final ErrorCode todoItemNotFound = ErrorCode.TODOITEM_NOT_FOUND;
-		log.error(todoItemNotFound.getMessage() + ", id=" + e.getId());
-		return buildError(todoItemNotFound);
+	@ExceptionHandler(BusinessException.class)
+	protected ErrorResponse handleBusinessException(final BusinessException e) {
+		log.error("handleBusinessException", e);
+		return buildError(e.getErrorCode());
 	}
 	
 	private ErrorResponse buildFieldError(ErrorCode errorCode, List<ErrorResponse.FieldError> errors) {
