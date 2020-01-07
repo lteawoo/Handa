@@ -4,16 +4,19 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-	TODOITEM_NOT_FOUND("TI_001", "해당 아이템이 없습니다.", 404),
-	INPUT_VALUE_INVALID("CM_001", "입력값이 올바르지 않습니다.", 400);
+	// Common
+	INPUT_VALUE_INVALID(400, "C001", "입력값이 올바르지 않습니다."),
+	
+	// Todo_Item
+	TODO_ITEM_NOT_FOUND(400, "T001", "아이템을 찾을 수 없습니다.");
 	
 	private final String code;
 	private final String message;
 	private final int status;
 	
-	ErrorCode(String code, String message, int status) {
+	ErrorCode(final int status, final String code, final String message) {
+		this.status = status;
 		this.code = code;
 		this.message = message;
-		this.status = status;
 	}
 }
