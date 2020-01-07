@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.verification.VerificationMode;
 
 import kr.taeu.handa.global.error.ErrorCode;
 import kr.taeu.handa.todoItem.domain.TodoItem;
@@ -91,6 +92,22 @@ public class TestTodoItemService {
 	}
 	
 	@Test
+	public void 없는_아이템_조회() {
+		//given
+		given(repo.findById(any())).willReturn(Optional.empty());
+		
+		//when
+		//this.service.findById(1L);
+		TodoItemNotFoundException thrown = assertThrows(
+				TodoItemNotFoundException.class,
+				() -> this.service.findById(1L));
+		
+		//then
+		verify(this.repo, atLeastOnce()).findById(any());
+		assertEquals(thrown.getErrorCode(), ErrorCode.TODOITEM_NOT_FOUND);
+	}
+	
+	@Test
 	public void 아이템_수정() {
 		//given
 		final TodoItemDto.ModifyContentReq modifyContentReq = buildModfiyContentReq("내용 변경 테스트!");
@@ -135,20 +152,5 @@ public class TestTodoItemService {
 		//then
 		assertEquals(false, this.service.list().stream()
 				.anyMatch(m -> m.getId() == todoItem.getId()));
-	}
-	
-	@Test
-	public void 없는_아이템_조회() {
-		//given
-		given(repo.findById(any())).willReturn(Optional.empty());
-		
-		//when
-		//this.service.findById(1L);
-		TodoItemNotFoundException thrown = assertThrows(
-				TodoItemNotFoundException.class,
-				() -> this.service.findById(1L));
-		
-		//then
-		assertEquals(ErrorCode.TODOITEM_NOT_FOUND, thrown.getMessage());
 	}
 }
