@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
@@ -34,7 +35,7 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public TodoItem findById(long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
-		//todoItem.orElse();
+		todoItem.orElseThrow(() -> new TodoItemNotFoundException(id));
 		return todoItem.get();
 	}
 	
@@ -55,6 +56,7 @@ public class TodoItemService {
 	}
 	
 	public void delete(long id) {
-		todoItemRepository.deleteById(id);
+		final TodoItem todoItem = findById(id);
+		todoItemRepository.delete(todoItem);
 	}
 }

@@ -1,12 +1,15 @@
-package kr.taeu.handa.todoItem.error;
+package kr.taeu.handa.error;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 	private String message;
 	private String code;
@@ -26,6 +29,7 @@ public class ErrorResponse {
 	}
 	
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class FieldError {
 		private String field;
 		private String value;

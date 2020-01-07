@@ -1,4 +1,4 @@
-package kr.taeu.handa.todoItem.error;
+package kr.taeu.handa.error;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import kr.taeu.handa.todoItem.Exception.TodoItemNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
@@ -33,12 +34,28 @@ public class ErrorExceptionController {
 					.collect(Collectors.toList()));
 	}
 	
+	@ExceptionHandler(TodoItemNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	protected ErrorResponse handleTodoItemNotFoundException(TodoItemNotFoundException e) {
+		final ErrorCode todoItemNotFound = ErrorCode.TODOITEM_NOT_FOUND;
+		log.error(todoItemNotFound.getMessage() + ", id=" + e.getId());
+		return buildError(todoItemNotFound);
+	}
+	
 	private ErrorResponse buildFieldError(ErrorCode errorCode, List<ErrorResponse.FieldError> errors) {
 		return ErrorResponse.builder()
 				.code(errorCode.getCode())
 				.status(errorCode.getStatus())
 				.message(errorCode.getMessage())
 				.errors(errors)
+				.build();
+	}
+	
+	private ErrorResponse buildError(ErrorCode errorCode) {
+		return ErrorResponse.builder()
+				.code(errorCode.getCode())
+				.status(errorCode.getStatus())
+				.message(errorCode.getMessage())
 				.build();
 	}
 }
