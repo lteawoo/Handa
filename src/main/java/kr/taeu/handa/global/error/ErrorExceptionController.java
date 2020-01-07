@@ -1,10 +1,7 @@
 package kr.taeu.handa.global.error;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,45 +12,27 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 @Slf4j
 public class ErrorExceptionController {
+	
+	/**
+	 * javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
+     * HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
+     * 주로 @RequestBody, @RequestPart 어노테이션에서 발생
+	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.error("handleMethodArgumentNotValidException", e);
-		final BindingResult bindingResult = e.getBindingResult();
-		final List<FieldError> errors = bindingResult.getFieldErrors();
-		
-		return buildFieldError(ErrorCode.INPUT_VALUE_INVALID,
-				errors.parallelStream()
-					.map(error -> ErrorResponse.FieldError.builder()
-							.reason(error.getDefaultMessage())
-							.field(error.getField())
-							.value((String) error.getRejectedValue())
-							.build())
-					.collect(Collectors.toList()));
+		final ErrorResponse response = ErrorResponse.build(ErrorCode.INVALID_TYPE_VALUE, e.getBindingResult());
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
 	 * 비즈니스 로직에서의 에러 검출 시 발생
 	 */
 	@ExceptionHandler(BusinessException.class)
-	protected ErrorResponse handleBusinessException(final BusinessException e) {
+	protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
 		log.error("handleBusinessException", e);
-		return buildError(e.getErrorCode());
-	}
-	
-	private ErrorResponse buildFieldError(ErrorCode errorCode, List<ErrorResponse.FieldError> errors) {
-		return ErrorResponse.builder()
-				.code(errorCode.getCode())
-				.status(errorCode.getStatus())
-				.message(errorCode.getMessage())
-				.errors(errors)
-				.build();
-	}
-	
-	private ErrorResponse buildError(ErrorCode errorCode) {
-		return ErrorResponse.builder()
-				.code(errorCode.getCode())
-				.status(errorCode.getStatus())
-				.message(errorCode.getMessage())
-				.build();
+		final ErrorCode errorCode = e.getErrorCode();
+		final ErrorResponse response = ErrorResponse.build(errorCode);
+		return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
 	}
 }

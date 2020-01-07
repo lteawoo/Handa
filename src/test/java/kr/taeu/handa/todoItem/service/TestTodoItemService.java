@@ -104,7 +104,7 @@ public class TestTodoItemService {
 		
 		//then
 		verify(this.repo, atLeastOnce()).findById(any());
-		assertEquals(thrown.getErrorCode(), ErrorCode.TODOITEM_NOT_FOUND);
+		assertEquals(thrown.getErrorCode(), ErrorCode.ITEM_NOT_FOUND);
 	}
 	
 	@Test
