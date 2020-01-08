@@ -3,7 +3,6 @@ package kr.taeu.handa.global.config;
 import javax.sql.DataSource;
 
 import org.h2.server.web.WebServlet;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
-	@Autowired
-	DataSource dataSource;
+	private DataSource dataSource;
+	
+	public AppConfig(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 	
 	@Bean
 	public JdbcTemplate getJdbcTemplate() {
