@@ -23,11 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TodoItemController {
 	private final TodoItemService todoItemService;
 	
-	@GetMapping(value="/api/status")
-	public String isRunning() {
-		return "상태 : Alive";
-	}
-	
 	@GetMapping(value="/api/item/list")
 	public List<TodoItem> list() {
 		return todoItemService.list();
