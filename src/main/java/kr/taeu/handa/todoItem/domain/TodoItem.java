@@ -3,7 +3,9 @@ package kr.taeu.handa.todoItem.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyContentReq;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyDoneReq;
@@ -11,17 +13,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
-@ToString
+@Table(name = "TODOITEM")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TodoItem{
 //	@Id
 //	private String email;
 	
-	@Id	@GeneratedValue
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(length = 500, nullable = false)
