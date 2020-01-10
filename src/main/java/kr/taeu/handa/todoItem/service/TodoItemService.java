@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.taeu.handa.member.dao.TodoItemRepository;
 import kr.taeu.handa.todoItem.domain.TodoItem;
-import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyContentReq;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyDoneReq;

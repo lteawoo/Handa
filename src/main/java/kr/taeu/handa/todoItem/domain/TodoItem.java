@@ -1,11 +1,16 @@
 package kr.taeu.handa.todoItem.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyContentReq;
 import kr.taeu.handa.todoItem.dto.TodoItemDto.ModifyDoneReq;
@@ -24,12 +29,22 @@ public class TodoItem{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", updatable = false)
 	private long id;
 	
-	@Column(length = 500, nullable = false)
+	@Column(name = "CONTENT", length = 500, nullable = false)
 	private String content;
 	
+	@Column(name = "DONE", nullable = false)
 	private boolean done;
+	
+	@CreationTimestamp
+	@Column(name = "CREATE_DT", nullable = false, updatable = false)
+	private LocalDateTime createDt;
+	
+	@UpdateTimestamp
+	@Column(name = "UPDATE_DT", nullable = false)
+	private LocalDateTime updateDt;
 	
 	@Builder
 	public TodoItem(String content, boolean done) {
