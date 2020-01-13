@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.verification.VerificationMode;
 
 import kr.taeu.handa.global.error.ErrorCode;
-import kr.taeu.handa.member.dao.TodoItemRepository;
+import kr.taeu.handa.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;

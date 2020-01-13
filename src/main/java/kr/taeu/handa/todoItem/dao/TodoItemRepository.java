@@ -1,4 +1,4 @@
-package kr.taeu.handa.member.dao;
+package kr.taeu.handa.todoItem.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
