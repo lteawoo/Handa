@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import kr.taeu.handa.member.dao.TodoItemRepository;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 
 @ExtendWith(SpringExtension.class)
