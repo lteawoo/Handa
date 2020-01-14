@@ -20,10 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-<<<<<<< HEAD
-=======
-import org.springframework.web.bind.MethodArgumentNotValidException;
->>>>>>> branch 'master' of https://github.com/lteawoo/Handa.git
 
 import kr.taeu.handa.global.error.ErrorCode;
 import kr.taeu.handa.todoItem.dao.TodoItemRepository;
