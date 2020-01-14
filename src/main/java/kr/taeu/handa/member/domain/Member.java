@@ -15,6 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import kr.taeu.handa.global.model.Email;
+import kr.taeu.handa.global.model.Password;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class Member {
 	@Column(name = "NICKNAME", length = 50)
 	private String name;
 	
+	@Embedded
+	@AttributeOverride(name = "value", column = @Column(name = "PASSWORD", nullable = false, length = 50))
+	private Password password;
+	
 	@CreationTimestamp
 	@Column(name = "CREATE_DT", nullable = false, updatable = false)
 	private LocalDateTime createDt;
@@ -50,10 +55,11 @@ public class Member {
 	private LocalDateTime updateDt;
 	
 	@Builder
-	public Member(Email email, UniqueCode uniqueCode, String name) {
+	public Member(Email email, UniqueCode uniqueCode, String name, Password password) {
 		this.email = email;
 		this.uniqueCode = uniqueCode;
 		this.name = name;
+		this.password = password;
 	}
 	
 	public void updateProfile(final String name) {
