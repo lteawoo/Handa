@@ -26,9 +26,7 @@ import kr.taeu.handa.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.todoItem.domain.TodoItem;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class TestTodoItemService {
 	
