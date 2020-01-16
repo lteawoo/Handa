@@ -1,5 +1,7 @@
 package kr.taeu.handa.member.dao;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,5 +42,6 @@ public class TestMemberRepository {
 		memberRepository.save(member);
 		
 		//then
+		assertTrue(memberRepository.existsByEmail(member.getEmail()));
 	}
 }
