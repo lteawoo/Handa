@@ -21,10 +21,6 @@ public class UniqueCode {
 		this.value = value;
 	}
 	
-	public static UniqueCode build(final String value) {
-		return new UniqueCode(value);
-	}
-	
 	public static UniqueCode generateCode() {
 		return new UniqueCode(UUID.randomUUID().toString().replace("-", ""));
 	}

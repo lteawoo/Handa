@@ -39,7 +39,7 @@ public class Member {
 	@AttributeOverride(name = "value", column = @Column(name = "UNIQUE_CODE", nullable = false, unique = true, updatable = false, length = 32))
 	private UniqueCode uniqueCode;
 	
-	@Column(name = "NICKNAME", length = 50)
+	@Column(name = "NICKNAME", nullable = false, unique = true, length = 50)
 	private String name;
 	
 	@Embedded
