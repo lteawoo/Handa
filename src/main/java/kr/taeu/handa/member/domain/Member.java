@@ -43,7 +43,7 @@ public class Member {
 	private String name;
 	
 	@Embedded
-	@AttributeOverride(name = "value", column = @Column(name = "PASSWORD", nullable = false, length = 50))
+	@AttributeOverride(name = "value", column = @Column(name = "PASSWORD", nullable = false, length = 100))
 	private Password password;
 	
 	@CreationTimestamp

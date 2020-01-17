@@ -23,16 +23,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
-	
-	@Value("spring.jwt.secret")
-	private String secretKey;
+	private String secretKey = "taeu";
 	
 	private long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 유효
 	
 	private final UserDetailsService userDetailsService;
 	
-	public JwtTokenProvider(long tokenValidMilisecond, UserDetailsService userDetailsService) {
-		this.tokenValidMilisecond = tokenValidMilisecond;
+	public JwtTokenProvider(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 
@@ -70,7 +67,7 @@ public class JwtTokenProvider {
 	
 	// request header에서 Jwt 파싱
 	public String parseToken(HttpServletRequest request) {
-		return request.getHeader("X-AUTH-TOKEN");
+		return request.getHeader("X-JWT");
 	}
 	
 	// Jwt에서 식별정보 추출

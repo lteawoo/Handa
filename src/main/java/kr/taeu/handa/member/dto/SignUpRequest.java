@@ -34,6 +34,7 @@ public class SignUpRequest {
 				.email(this.email)
 				.name(this.name)
 				.uniqueCode(uniqueCode)
+				.password(this.password)
 				.build();
 	}
 }
