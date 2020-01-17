@@ -24,14 +24,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenProvider {
 	private String secretKey = "taeu";
-	
 	private long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 유효
-	
-	private final UserDetailsService userDetailsService;
-	
-	public JwtTokenProvider(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
-	}
 
 	@PostConstruct
 	protected void init() {
@@ -73,10 +66,5 @@ public class JwtTokenProvider {
 	// Jwt에서 식별정보 추출
 	public String getMemberInfo(String token) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-	}
-	
-	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getMemberInfo(token));
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 }

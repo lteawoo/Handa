@@ -8,15 +8,21 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class JwtAuthenticationFilter extends GenericFilterBean {
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UserDetailsService userDetailsService;
 	
-	public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+	
+	public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userDetailsService = userDetailsService;
 	}
 
 	/*
@@ -28,9 +34,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String token = jwtTokenProvider.parseToken((HttpServletRequest)request);
 		
 		if(token != null && jwtTokenProvider.validateToken(token)) {
-			Authentication auth = jwtTokenProvider.getAuthentication(token);
+			Authentication auth = this.getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(auth);
 		}
 		chain.doFilter(request, response);
+	}
+	
+	private Authentication getAuthentication(String token) {
+		UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenProvider.getMemberInfo(token));
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 }

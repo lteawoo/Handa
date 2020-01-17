@@ -10,16 +10,15 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.taeu.handa.global.model.Email;
-import kr.taeu.handa.global.model.Password;
 import kr.taeu.handa.member.dao.MemberRepository;
 import kr.taeu.handa.member.domain.Member;
 import kr.taeu.handa.member.domain.Role;
 import kr.taeu.handa.member.domain.UniqueCode;
+import kr.taeu.handa.member.dto.SignInRequest;
 import kr.taeu.handa.member.dto.SignUpRequest;
 import kr.taeu.handa.member.exception.EmailDuplicateException;
 import kr.taeu.handa.member.exception.MemberNotFoundException;
@@ -41,6 +40,14 @@ public class MemberService implements UserDetailsService{
 //				Password.build(passwordEncoder.encode(dto.getPassword().getValue())));
 		
 		return memberRepository.save(dto.toEntity(UniqueCode.generateCode()));
+	}
+	
+	@Transactional(readOnly=true)
+	public Member signIn(SignInRequest dto) {
+		if(memberRepository.existsByEmail(dto.getEmail())) {
+			
+		}
+		
 	}
 
 	@Override

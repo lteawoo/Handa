@@ -27,4 +27,9 @@ public class MemberController {
 		
 		return new MemberResponse(memberService.signUp(crpytedReq));
 	}
+	
+	@PostMapping(value="/api/member/signIn")
+	public MemberResponse signIn(@RequestBody @Valid final SignInRequest req) {
+		return new MemberResponse(memberService.signIn(req));
+	}
 }
