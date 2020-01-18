@@ -2,6 +2,7 @@ package kr.taeu.handa.todoItem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -20,12 +21,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import kr.taeu.handa.global.error.ErrorCode;
+import kr.taeu.handa.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.todoItem.domain.TodoItem;
-import kr.taeu.handa.todoItem.domain.TodoItemRepository;
 import kr.taeu.handa.todoItem.dto.TodoItemDto;
-import lombok.extern.slf4j.Slf4j;
+import kr.taeu.handa.todoItem.exception.TodoItemNotFoundException;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class TestTodoItemService {
 	
@@ -88,27 +89,22 @@ public class TestTodoItemService {
 	}
 	
 	@Test
-	public void 아이템_수정() {
+	public void 없는_아이템_조회() {
 		//given
-		final TodoItemDto.ModifyContentReq modifyContentReq = buildModfiyContentReq("내용 변경 테스트!");
-		final TodoItemDto.ModifyDoneReq modifyDoneReq = buildModfiyDoneReq(true);
-		given(this.repo.findById(1L)).willReturn(Optional.of(this.list.get(0)));
-		given(this.repo.findById(2L)).willReturn(Optional.of(this.list.get(1)));
-		given(this.repo.save(this.list.get(0))).willReturn(modifyContentReq.toEntity());
-		given(this.repo.save(this.list.get(1))).willReturn(modifyDoneReq.toEntity());
+		given(repo.findById(any())).willReturn(Optional.empty());
 		
 		//when
-		final TodoItem todoItem1 = this.service.modifyContent(1L, modifyContentReq);
-		final TodoItem todoItem2 = this.service.modifyDone(2L, modifyDoneReq);
+		//this.service.findById(1L);
+		TodoItemNotFoundException thrown = assertThrows(
+				TodoItemNotFoundException.class,
+				() -> this.service.findById(1L));
 		
 		//then
-		verify(this.repo, times(2)).findById(anyLong());
-		verify(this.repo, times(2)).save(any());
-		assertEquals(modifyContentReq.getContent(), todoItem1.getContent());
-		assertEquals(modifyDoneReq.isDone(), todoItem2.isDone());
+		verify(this.repo, atLeastOnce()).findById(any());
+		assertEquals(thrown.getErrorCode(), ErrorCode.ITEM_NOT_FOUND);
 	}
 	
-	private TodoItemDto.ModifyContentReq buildModfiyContentReq(String content) {
+	private TodoItemDto.ModifyContentReq buildModifyContentReq(String content) {
 		return TodoItemDto.ModifyContentReq.builder()
 				.content(content)
 				.build();
