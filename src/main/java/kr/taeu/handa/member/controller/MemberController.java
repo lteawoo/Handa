@@ -16,16 +16,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-	private final PasswordEncoder passwordEncoder;
 	private final MemberService memberService;
 	
 	@PostMapping(value="/api/member/signUp")
 	public MemberResponse signUp(@RequestBody @Valid final SignUpRequest req) {
-		SignUpRequest crpytedReq = new SignUpRequest(req.getEmail(),
-				req.getName(),
-				Password.build(passwordEncoder.encode(req.getPassword().getValue())));
-		
-		return new MemberResponse(memberService.signUp(crpytedReq));
+		return new MemberResponse(memberService.signUp(req));
 	}
 	
 	@PostMapping(value="/api/member/signIn")

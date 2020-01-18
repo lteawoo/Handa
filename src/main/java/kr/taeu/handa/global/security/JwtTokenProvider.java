@@ -1,4 +1,4 @@
-package kr.taeu.handa.global.config.security;
+package kr.taeu.handa.global.security;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
 	}
 	
 	// Jwt에서 식별정보 추출
-	public String getMemberInfo(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+	public Claims getClaims(String token) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 	}
 }
