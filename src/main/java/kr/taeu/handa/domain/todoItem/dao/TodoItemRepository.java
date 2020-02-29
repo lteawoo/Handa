@@ -1,9 +1,9 @@
-package kr.taeu.handa.todoItem.dao;
+package kr.taeu.handa.domain.todoItem.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import kr.taeu.handa.todoItem.domain.TodoItem;
+import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 
-public interface TodoItemRepository extends JpaRepository<TodoItem, Long>{
+public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
 
 }

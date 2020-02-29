@@ -22,26 +22,25 @@ public class DatabaseConfig {
 		log.info("dataSource setup...");
 		// no need shutdown, EmbeddedDatabaseFactoryBean will take care of this
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		EmbeddedDatabase db = builder
-				.setType(EmbeddedDatabaseType.H2) //.H2 or .DERBY
+		EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.H2) // .H2 or .DERBY
 				.build();
 		return db;
 	}
-	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		log.info("entityManagerFactory setup...");
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl(true);
-		
+
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setDataSource(dataSource());
 		factory.setPackagesToScan("kr.taeu.handa");
+		factory.setDataSource(dataSource());
 		factory.setJpaProperties(additionalProperties());
 		return factory;
 	}
-	
+
 	private Properties additionalProperties() {
 		log.info("additionalProperties setup...");
 		Properties properties = new Properties();

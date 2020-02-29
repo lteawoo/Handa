@@ -1,4 +1,4 @@
-package kr.taeu.handa.todoItem.dto;
+package kr.taeu.handa.domain.todoItem.dto;
 
 import java.util.List;
 
