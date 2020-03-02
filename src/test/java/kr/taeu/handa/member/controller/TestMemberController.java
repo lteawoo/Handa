@@ -1,12 +1,14 @@
 package kr.taeu.handa.member.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,6 +41,8 @@ public class TestMemberController {
 		given(memberDetailsService.createMember(signUpRequest)).willReturn(signUpRequest.toEntity());
 		
 		//when
-		mockMvc
+		mockMvc.perform(post("/member/signup")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(signUpRequest))
 	}
 }
