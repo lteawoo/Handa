@@ -33,7 +33,7 @@ public class TodoItemService {
 	}
 
 	@Transactional(readOnly = true)
-	public TodoItem findById(long id) {
+	public TodoItem findById(Long id) {
 		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
 		todoItem.orElseThrow(() -> new TodoItemNotFoundException(id));
 		return todoItem.get();
@@ -43,19 +43,19 @@ public class TodoItemService {
 		return todoItemRepository.save(dto.toEntity());
 	}
 
-	public TodoItem modifyContent(long id, ModifyContentReq dto) {
+	public TodoItem modifyContent(Long id, ModifyContentReq dto) {
 		final TodoItem todoItem = findById(id);
 		todoItem.modifyContent(dto);
 		return todoItem;
 	}
 
-	public TodoItem modifyDone(long id, ModifyDoneReq dto) {
+	public TodoItem modifyDone(Long id, ModifyDoneReq dto) {
 		final TodoItem todoItem = findById(id);
 		todoItem.modifyDone(dto);
 		return todoItem;
 	}
 
-	public void delete(long id) {
+	public void delete(Long id) {
 		final TodoItem todoItem = findById(id);
 		todoItemRepository.delete(todoItem);
 	}

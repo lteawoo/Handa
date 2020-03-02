@@ -30,7 +30,7 @@ public class TodoItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", updatable = false)
-	private long id;
+	private Long id;
 
 	@Column(name = "CONTENT", length = 500, nullable = false)
 	private String content;

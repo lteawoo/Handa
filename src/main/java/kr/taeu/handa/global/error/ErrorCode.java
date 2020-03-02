@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-	OBJECT_NOT_FOUND("E001", "Object Not Found", 400), REQUEST_CONFILICT_EXCEPTION("E002", "Request Conflict", 409),
+	OBJECT_NOT_FOUND("E001", "Object Not Found", 400),
+	REQUEST_CONFILICT_EXCEPTION("E002", "Request Conflict", 409),
 	INVALID_INPUT_VALUE("E003", "Invalid Input Value", 400),
 
 	UNAUTHORIZED("S001", "Unauthorized", 401),
