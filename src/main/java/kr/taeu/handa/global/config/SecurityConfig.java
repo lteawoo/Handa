@@ -28,14 +28,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/member/signup", "/member/signin").anonymous().anyRequest()
-				.authenticated().and().exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
-				.and().formLogin().disable().csrf().disable();
+		http.authorizeRequests()
+				.antMatchers("/member/signup", "/member/signin").anonymous()
+				.anyRequest().authenticated()
+			.and()
+				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+			.and()
+				.formLogin().disable()
+				.csrf().disable();
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-				"/configuration/security", "/swagger-ui.html", "/webjars/**", "/h2-console/**", "/js/**");
+		web.ignoring()
+			.antMatchers("/v2/api-docs",
+					"/configuration/ui",
+					"/swagger-resources/**",
+					"/configuration/security",
+					"/swagger-ui.html",
+					"/webjars/**",
+					"/h2-console/**",
+					"/js/**");
 	}
 }

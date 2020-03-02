@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import kr.taeu.handa.domain.member.domain.model.Email;
+import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
 import lombok.AccessLevel;
@@ -26,10 +27,13 @@ import lombok.NoArgsConstructor;
 public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	@Embedded
 	private Email email;
+	
+	@Embedded
+	private Name name;
 
 	@Embedded
 	private Password password;
@@ -40,8 +44,9 @@ public class Member {
 	private Role role;
 
 	@Builder
-	public Member(Email email, Password password, Role role) {
+	private Member(Email email, Name name, Password password, Role role) {
 		this.email = email;
+		this.name = name;
 		this.password = password;
 		this.role = role;
 	}

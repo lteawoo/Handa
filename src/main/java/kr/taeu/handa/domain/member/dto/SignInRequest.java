@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,8 @@ public class SignInRequest {
 	@Valid
 	private Password password;
 
-	public SignInRequest(@Valid Email email, @Valid Password password) {
+	@Builder
+	private SignInRequest(@Valid Email email, @Valid Password password) {
 		this.email = email;
 		this.password = password;
 	}
