@@ -2,6 +2,7 @@ package kr.taeu.handa.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,12 @@ import kr.taeu.handa.global.security.rest.filter.RestAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+	    return super.authenticationManagerBean();
+	}
+	
 	@Bean
 	public RestAuthenticationFilter restAuthenticationFilter() throws Exception {
 		RestAuthenticationFilter restAuthenticationFilter = new RestAuthenticationFilter(

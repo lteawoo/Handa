@@ -1,8 +1,11 @@
 package kr.taeu.handa.domain.member.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Name;
@@ -21,6 +28,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "MEMBER")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,6 +50,14 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private Role role;
+	
+	@Column(name = "LAST_MODIFIED_DATE")
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
+	
+	@Column(name = "CREATED_DATE", nullable=false, updatable = false)
+	@CreatedDate
+	private LocalDateTime createdDate; 
 
 	@Builder
 	private Member(Email email, Name name, Password password, Role role) {
