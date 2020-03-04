@@ -40,13 +40,34 @@ public class TestMember {
 	
 	@Test
 	@WithAnonymousUser
-	public void 통합_테스트_회원가입_요청() throws Exception {
+	public void 회원가입_요청() throws Exception {
 		//given
 		SignUpRequest signUpRequest = SignUpRequest.builder()
 				.email(new Email("taeu@test.kr"))
 				.name(new Name("테스트계정"))
 				.password(new Password("12345"))
-				.role(Role.MEMBER)
+				.build();
+		//given(memberDetailsService.createMember(any(SignUpRequest.class))).willReturn(signUpRequest.toEntity());
+		
+		//when
+		mockMvc.perform(post("/member/signup")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(signUpRequest)))
+				.andDo(print())
+	
+		//then
+				.andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("email.value").value("taeu@test.kr"));
+	}
+	
+	@Test
+	@WithAnonymousUser
+	public void 데이터누락_회원가입_요청() throws Exception {
+		//given
+		SignUpRequest signUpRequest = SignUpRequest.builder()
+				.email(new Email("taeu@test.kr"))
+				//.name(new Name("테스트계정"))
+				//.password(new Password("12345"))
 				.build();
 		//given(memberDetailsService.createMember(any(SignUpRequest.class))).willReturn(signUpRequest.toEntity());
 		
