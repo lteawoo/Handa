@@ -1,8 +1,10 @@
 package kr.taeu.handa.member.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -89,9 +91,8 @@ public class TestMemberController {
 			assertEquals(dto.getCode(), ErrorCode.INVALID_INPUT_VALUE.getCode());
 			assertEquals(dto.getMessage(), ErrorCode.INVALID_INPUT_VALUE.getMessage());
 			
-			for(FieldError fieldError : dto.getErrors()) {
-				
-			}
+//			dto.getErrors().stream()
+//					.map((fieldError) -> { return fieldError.getField(); })
 			
 //				.andExpect(status().isBadRequest())
 //				.andExpect(MockMvcResultMatchers.jsonPath("code").value(ErrorCode.INVALID_INPUT_VALUE.getCode()));
