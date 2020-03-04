@@ -9,29 +9,31 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
-import kr.taeu.handa.domain.member.domain.model.Role;
 import kr.taeu.handa.domain.member.dto.SignUpRequest;
 import kr.taeu.handa.domain.member.exception.EmailAlreadyExistsException;
 import kr.taeu.handa.domain.member.service.MemberDetailsService;
+import kr.taeu.handa.global.config.AppConfig;
 import kr.taeu.handa.global.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@Import(AppConfig.class)
 public class TestMemberService {
-	@InjectMocks
+	@SpyBean
 	MemberDetailsService memberDetailsService;
 
-	@Mock
+	@MockBean
 	MemberDetailsRepository memberDetailsRepository;
 
 //	@Test
@@ -55,7 +57,6 @@ public class TestMemberService {
 				.email(new Email("test@taeu.kr"))
 				.name(new Name("테스트계정"))
 				.password(new Password("12345"))
-				.role(Role.MEMBER)
 				.build();
 		given(this.memberDetailsRepository.existsByEmail(any(Email.class))).willReturn(true);
 
@@ -76,9 +77,8 @@ public class TestMemberService {
 				.email(email)
 				.name(new Name("테스트 계정"))
 				.password(new Password("12345"))
-				.role(Role.MEMBER)
 				.build();
-		given(this.memberDetailsRepository.existsByEmail(email)).willReturn(false);
+		given(this.memberDetailsRepository.existsByEmail(any(Email.class))).willReturn(false);
 		given(this.memberDetailsRepository.save(any(Member.class))).willReturn(dto.toEntity());
 
 		// when
