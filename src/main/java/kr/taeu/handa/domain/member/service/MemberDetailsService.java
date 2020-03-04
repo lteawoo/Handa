@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.member.domain.model.Email;
+import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.dto.SignUpRequest;
 import kr.taeu.handa.domain.member.exception.EmailAlreadyExistsException;
 import kr.taeu.handa.domain.member.exception.EmailNotFoundException;
@@ -41,8 +42,7 @@ public class MemberDetailsService implements UserDetailsService {
 		SignUpRequest cryptedReq = SignUpRequest.builder()
 				.email(signUpRequest.getEmail())
 				.name(signUpRequest.getName())
-				.password(signUpRequest.getPassword())
-				.role(signUpRequest.getRole())
+				.password(new Password(passwordEncoder.encode(signUpRequest.getPassword().getValue())))
 				.build();
 
 		return this.memberDetailsRepository.save(cryptedReq.toEntity());
