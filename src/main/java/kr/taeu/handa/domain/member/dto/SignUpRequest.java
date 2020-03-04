@@ -1,6 +1,7 @@
 package kr.taeu.handa.domain.member.dto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.member.domain.model.Email;
@@ -16,23 +17,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequest {
 	@Valid
+	@NotNull
 	private Email email;
 
 	@Valid
+	@NotNull
 	private Name name;
 	
 	@Valid
+	@NotNull
 	private Password password;
 
-	@Valid
 	private Role role;
 
 	@Builder
-	private SignUpRequest(@Valid Email email, @Valid Name name, @Valid Password password, @Valid Role role) {
+	private SignUpRequest(@Valid Email email, @Valid Name name, @Valid Password password) {
 		this.email = email;
 		this.name = name;
 		this.password = password;
-		this.role = role;
+		this.role = Role.MEMBER;
 	}
 
 	public Member toEntity() {

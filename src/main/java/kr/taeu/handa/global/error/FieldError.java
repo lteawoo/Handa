@@ -5,9 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FieldError {
 	private String field;
 	private String value;
