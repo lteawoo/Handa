@@ -22,13 +22,15 @@ public class WriteItemRequest {
 	private boolean done;
 
 	@Builder
-	public WriteItemRequest(String content) {
+	public WriteItemRequest(Member member, String content) {
+		this.member = member;
 		this.content = content;
 		this.done = false;
 	}
 
 	public TodoItem toEntity() {
 		return TodoItem.builder()
+				.member(this.member)
 				.content(this.content)
 				.done(this.done)
 				.build();

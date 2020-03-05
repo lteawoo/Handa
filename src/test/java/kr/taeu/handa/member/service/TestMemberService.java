@@ -26,6 +26,9 @@ import kr.taeu.handa.global.config.AppConfig;
 import kr.taeu.handa.global.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
+/*
+ * SpringExtension 및 Spring boot test를 이용하여 테스트
+ */
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @Import(AppConfig.class)

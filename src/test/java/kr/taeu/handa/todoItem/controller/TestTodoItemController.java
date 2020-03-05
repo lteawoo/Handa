@@ -8,6 +8,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import kr.taeu.handa.domain.todoItem.controller.TodoItemController;
+import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
+import kr.taeu.handa.domain.todoItem.service.TodoItemService;
+import kr.taeu.handa.global.error.ControllerExceptionHandler;
+
 @ExtendWith(MockitoExtension.class)
 public class TestTodoItemController {
 
@@ -25,6 +30,6 @@ public class TestTodoItemController {
 	@BeforeEach
 	private void setUp() {
 		mockMvc = MockMvcBuilders.standaloneSetup(todoItemController)
-				.setControllerAdvice(new ErrorExceptionController()).build();
+				.setControllerAdvice(new ControllerExceptionHandler()).build();
 	}
 }
