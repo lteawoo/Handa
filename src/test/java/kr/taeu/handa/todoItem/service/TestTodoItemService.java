@@ -7,9 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
 import kr.taeu.handa.domain.member.dto.SignUpRequest;
-import kr.taeu.handa.domain.member.service.MemberDetailsService;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.TodoItemDto;
@@ -46,28 +45,15 @@ public class TestTodoItemService {
 	private TodoItemRepository todoItemRepository;
 	
 	private Member member;
-	
-	List<TodoItem> list;
 
 	@BeforeEach
-	public void setUp() {
-		SignUpRequest dto = SignUpRequest.builder()
-				.email(new Email("test@taeu.kr"))
-				.name(new Name("테스트계정"))
-				.password(new Password("12345"))
-				.build();
-		
+	public void setUp() {		
 		this.member = Member.builder()
 				.email(new Email("test@taeu.kr"))
 				.name(new Name("테스트계정"))
 				.password(new Password("12345"))
 				.role(Role.MEMBER)
 				.build();
-		
-		list = new ArrayList<TodoItem>();
-		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
-		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
-		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
 	}
 
 	private WriteItemRequest buildWriteItemRequest(String content) {
@@ -89,11 +75,16 @@ public class TestTodoItemService {
 		// then
 		assertEquals(req.getMember(), this.member);
 		assertEquals(req.getContent(), saved.getContent());
+		verify(this.todoItemRepository, only()).save(any());
 	}
 
 	@Test
 	public void 모든_아이템_조회() {
 		// given
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
 		given(this.todoItemRepository.findAll()).willReturn(list);
 
 		// when
@@ -101,15 +92,19 @@ public class TestTodoItemService {
 
 		// then
 		verify(this.todoItemRepository, atLeastOnce()).findAll();
-		assertIterableEquals(this.list, listByService);
+		assertIterableEquals(list, listByService);
 	}
 
 	@Test
 	public void 개별_아이템_조회() {
 		// given
-		given(this.todoItemRepository.findById(1L)).willReturn(Optional.of(this.list.get(0)));
-		given(this.todoItemRepository.findById(2L)).willReturn(Optional.of(this.list.get(1)));
-		given(this.todoItemRepository.findById(3L)).willReturn(Optional.of(this.list.get(2)));
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
+		given(this.todoItemRepository.findById(1L)).willReturn(Optional.of(list.get(0)));
+		given(this.todoItemRepository.findById(2L)).willReturn(Optional.of(list.get(1)));
+		given(this.todoItemRepository.findById(3L)).willReturn(Optional.of(list.get(2)));
 
 		// when
 		final TodoItem todoItem1 = this.todoItemService.findById(1L);
@@ -118,9 +113,9 @@ public class TestTodoItemService {
 
 		// then
 		verify(this.todoItemRepository, times(3)).findById(anyLong());
-		assertEquals(this.list.get(0), todoItem1);
-		assertEquals(this.list.get(1), todoItem2);
-		assertEquals(this.list.get(2), todoItem3);
+		assertEquals(list.get(0), todoItem1);
+		assertEquals(list.get(1), todoItem2);
+		assertEquals(list.get(2), todoItem3);
 	}
 
 	@Test
@@ -129,7 +124,6 @@ public class TestTodoItemService {
 		given(todoItemRepository.findById(any())).willReturn(Optional.empty());
 
 		// when
-		// this.service.findById(1L);
 		TodoItemNotFoundException thrown = assertThrows(TodoItemNotFoundException.class,
 				() -> this.todoItemService.findById(1L));
 
@@ -138,17 +132,13 @@ public class TestTodoItemService {
 		assertEquals(thrown.getErrorCode(), ErrorCode.OBJECT_NOT_FOUND);
 	}
 
-	private TodoItemDto.ModifyContentReq buildModifyContentReq(String content) {
-		return TodoItemDto.ModifyContentReq.builder().content(content).build();
-	}
-
-	private TodoItemDto.ModifyDoneReq buildModfiyDoneReq(boolean done) {
-		return TodoItemDto.ModifyDoneReq.builder().done(done).build();
-	}
-
 	@Test
 	public void 아이템_삭제() {
 		// given
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
 		given(todoItemRepository.findById(1L)).willReturn(Optional.of(list.get(0)));
 		TodoItem todoItem = this.todoItemService.findById(1L);
 
