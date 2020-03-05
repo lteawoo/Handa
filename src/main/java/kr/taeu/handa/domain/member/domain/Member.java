@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", updatable = false)
 	private Long id;
 
 	@Embedded
