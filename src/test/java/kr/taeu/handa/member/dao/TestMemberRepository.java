@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
@@ -18,6 +19,7 @@ import kr.taeu.handa.domain.member.domain.model.Role;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@EnableJpaAuditing
 public class TestMemberRepository {
 	@Autowired
 	MemberDetailsRepository memberDetailsRepository;

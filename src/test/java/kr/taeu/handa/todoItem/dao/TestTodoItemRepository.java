@@ -1,21 +1,50 @@
 package kr.taeu.handa.todoItem.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
+import kr.taeu.handa.domain.member.domain.Member;
+import kr.taeu.handa.domain.member.domain.model.Email;
+import kr.taeu.handa.domain.member.domain.model.Name;
+import kr.taeu.handa.domain.member.domain.model.Password;
+import kr.taeu.handa.domain.member.domain.model.Role;
+import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
+import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@EnableJpaAuditing
 public class TestTodoItemRepository {
 	@Autowired
 	private TodoItemRepository todoItemRepository;
+	@Autowired
+	private MemberDetailsRepository memberDetailsRepository;
+	
+	private Member member;
+	
+	@BeforeEach
+	public void setup() {
+		this.member = Member.builder()
+				.email(new Email("test@taeu.kr"))
+				.name(new Name("테스트"))
+				.password(new Password("12345"))
+				.role(Role.MEMBER)
+				.build();
+		this.memberDetailsRepository.save(this.member);
+	}
 
 	@AfterEach
 	public void cleanup() {
@@ -42,5 +71,62 @@ public class TestTodoItemRepository {
 		item = itemList.get(1);
 		assertEquals("호일을 사자", item.getContent());
 		assertEquals(2, itemList.size());
+	}
+	
+	@Test
+	public void 아이템_저장() {
+		// given
+		TodoItem todoItem = TodoItem.builder()
+				.member(this.member)
+				.content("바나나를 먹자")
+				.done(false)
+				.build();
+		
+		// when
+		this.todoItemRepository.save(todoItem);
+		
+		// then
+		assertTrue(this.todoItemRepository.existsById(todoItem.getId()));
+		assertEquals(this.member, todoItem.getMember());
+		assertEquals(todoItem.getContent(), todoItem.getContent());
+		assertEquals(todoItem.isDone(), todoItem.isDone());
+	}
+	
+	@Test
+	public void 아이템_조회() {
+		// given
+		TodoItem todoItem = TodoItem.builder()
+				.member(this.member)
+				.content("바나나를 먹자")
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem);
+		
+		// when
+		Optional<TodoItem> finded = this.todoItemRepository.findById(todoItem.getId());
+		TodoItem findedItem = finded.get();
+		
+		// then
+		assertTrue(this.todoItemRepository.existsById(findedItem.getId()));
+		assertEquals(this.member, findedItem.getMember());
+		assertEquals(todoItem.getContent(), findedItem.getContent());
+		assertEquals(todoItem.isDone(), findedItem.isDone());
+	}
+	
+	@Test
+	public void 아이템_삭제() {
+		// given
+		TodoItem todoItem = TodoItem.builder()
+				.member(this.member)
+				.content("바나나를 먹자")
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem);
+		
+		// when
+		this.todoItemRepository.delete(todoItem);
+		
+		// then
+		assertTrue(!this.todoItemRepository.existsById(todoItem.getId()));
 	}
 }
