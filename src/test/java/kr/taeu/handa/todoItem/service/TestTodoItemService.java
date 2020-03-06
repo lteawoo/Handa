@@ -3,6 +3,7 @@ package kr.taeu.handa.todoItem.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -27,10 +28,10 @@ import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
-import kr.taeu.handa.domain.member.dto.SignUpRequest;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto;
+import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
 import kr.taeu.handa.domain.todoItem.exception.TodoItemNotFoundException;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
@@ -76,6 +77,52 @@ public class TestTodoItemService {
 		assertEquals(req.getMember(), this.member);
 		assertEquals(req.getContent(), saved.getContent());
 		verify(this.todoItemRepository, only()).save(any());
+	}
+	
+	@Test
+	public void 아이템_내용_수정() {
+		// given
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
+		given(this.todoItemRepository.findById(1L)).willReturn(Optional.of(list.get(0)));
+		given(this.todoItemRepository.findById(2L)).willReturn(Optional.of(list.get(1)));
+		given(this.todoItemRepository.findById(3L)).willReturn(Optional.of(list.get(2)));
+		
+		ModifyContentRequest dto = ModifyContentRequest.builder()
+				.content("바나나를 먹지말자")
+				.build();
+		
+		// when
+		TodoItem item = this.todoItemService.modifyContent(1L, dto);
+		
+		// then
+		assertEquals("바나나를 먹지말자", item.getContent());
+		verify(this.todoItemRepository, only()).findById(1L);
+	}
+	
+	@Test
+	public void 아이템_완료여부_수정() {
+		// given
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
+		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
+		given(this.todoItemRepository.findById(1L)).willReturn(Optional.of(list.get(0)));
+		given(this.todoItemRepository.findById(2L)).willReturn(Optional.of(list.get(1)));
+		given(this.todoItemRepository.findById(3L)).willReturn(Optional.of(list.get(2)));
+		
+		ModifyDoneRequest modifyDoneRequest = ModifyDoneRequest.builder()
+				.done(true)
+				.build();
+		
+		// when
+		TodoItem item = this.todoItemService.modifyDone(1L, modifyDoneRequest);
+		
+		// then
+		assertTrue(item.isDone());
+		verify(this.todoItemRepository, only()).findById(1L);
 	}
 
 	@Test

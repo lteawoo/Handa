@@ -12,15 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import kr.taeu.handa.domain.member.domain.Member;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto.ModifyContentReq;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto.ModifyDoneReq;
+import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,11 +60,11 @@ public class TodoItem {
 		this.done = done;
 	}
 
-	public void modifyContent(ModifyContentReq dto) {
+	public void modifyContent(ModifyContentRequest dto) {
 		this.content = dto.getContent();
 	}
 
-	public void modifyDone(ModifyDoneReq dto) {
+	public void modifyDone(ModifyDoneRequest dto) {
 		this.done = dto.isDone();
 	}
 }

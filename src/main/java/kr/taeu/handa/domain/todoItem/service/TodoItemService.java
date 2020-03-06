@@ -10,10 +10,7 @@ import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto.ModifyContentReq;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto.ModifyDoneReq;
 import kr.taeu.handa.domain.todoItem.exception.TodoItemNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,17 +43,17 @@ public class TodoItemService {
 		return todoItemRepository.save(dto.toEntity());
 	}
 
-//	public TodoItem modifyContent(Long id, ModifyContentRequest dto) {
-//		final TodoItem todoItem = findById(id);
-//		todoItem.modifyContent(dto);
-//		return todoItem;
-//	}
-//
-//	public TodoItem modifyDone(Long id, ModifyDoneRequest dto) {
-//		final TodoItem todoItem = findById(id);
-//		todoItem.modifyDone(dto);
-//		return todoItem;
-//	}
+	public TodoItem modifyContent(Long id, ModifyContentRequest dto) {
+		final TodoItem todoItem = findById(id);
+		todoItem.modifyContent(dto);
+		return todoItem;
+	}
+
+	public TodoItem modifyDone(Long id, ModifyDoneRequest dto) {
+		final TodoItem todoItem = findById(id);
+		todoItem.modifyDone(dto);
+		return todoItem;
+	}
 
 	public void delete(Long id) {
 		final TodoItem todoItem = findById(id);

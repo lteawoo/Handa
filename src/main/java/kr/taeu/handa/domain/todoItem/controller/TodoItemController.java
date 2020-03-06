@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
-import kr.taeu.handa.domain.todoItem.dto.TodoItemDto;
 import kr.taeu.handa.domain.todoItem.dto.TodoItemResponse;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
