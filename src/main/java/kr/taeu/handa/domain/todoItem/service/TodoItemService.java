@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
@@ -39,7 +40,7 @@ public class TodoItemService {
 		return todoItem.get();
 	}
 
-	public TodoItem write(WriteItemRequest dto) {
+	public TodoItem write(Member member, WriteItemRequest dto) {
 		return todoItemRepository.save(dto.toEntity());
 	}
 

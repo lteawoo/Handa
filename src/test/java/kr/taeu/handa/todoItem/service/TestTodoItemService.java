@@ -59,7 +59,6 @@ public class TestTodoItemService {
 
 	private WriteItemRequest buildWriteItemRequest(String content) {
 		return WriteItemRequest.builder()
-				.member(this.member)
 				.content(content)
 				.build();
 	}
@@ -71,7 +70,7 @@ public class TestTodoItemService {
 		given(this.todoItemRepository.save(any())).willReturn(req.toEntity());
 		
 		// when
-		TodoItem saved = this.todoItemService.write(req);
+		TodoItem saved = this.todoItemService.write(this.member, req);
 		
 		// then
 		assertEquals(req.getMember(), this.member);

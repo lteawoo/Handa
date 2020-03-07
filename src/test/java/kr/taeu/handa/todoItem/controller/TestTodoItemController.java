@@ -4,7 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -13,7 +14,8 @@ import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
 import kr.taeu.handa.global.error.ControllerExceptionHandler;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = { TodoItemController.class } )
 public class TestTodoItemController {
 
 	@InjectMocks
@@ -29,7 +31,7 @@ public class TestTodoItemController {
 
 	@BeforeEach
 	private void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(todoItemController)
+		this.mockMvc = MockMvcBuilders.standaloneSetup(todoItemController)
 				.setControllerAdvice(new ControllerExceptionHandler()).build();
 	}
 }

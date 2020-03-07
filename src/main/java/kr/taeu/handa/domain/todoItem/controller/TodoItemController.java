@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
+import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
 import kr.taeu.handa.domain.todoItem.dto.TodoItemResponse;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
@@ -34,17 +36,17 @@ public class TodoItemController {
 		return new TodoItemResponse(todoItemService.write(dto));
 	}
 
-//	@PostMapping(value = "/api/item/modifyContent/{id}")
-//	public TodoItemDto.Res modifyContent(@PathVariable final Long id,
-//			@RequestBody @Valid final TodoItemDto.ModifyContentReq dto) {
-//		return new TodoItemDto.Res(todoItemService.modifyContent(id, dto));
-//	}
-//
-//	@PostMapping(value = "/api/item/modifyDone/{id}")
-//	public TodoItemDto.Res modifyDone(@PathVariable final Long id,
-//			@RequestBody @Valid final TodoItemDto.ModifyDoneReq dto) {
-//		return new TodoItemDto.Res(todoItemService.modifyDone(id, dto));
-//	}
+	@PostMapping(value = "/api/item/modifyContent/{id}")
+	public TodoItemResponse modifyContent(@PathVariable final Long id,
+			@RequestBody @Valid final ModifyContentRequest dto) {
+		return new TodoItemResponse(todoItemService.modifyContent(id, dto));
+	}
+
+	@PostMapping(value = "/api/item/modifyDone/{id}")
+	public TodoItemResponse modifyDone(@PathVariable final Long id,
+			@RequestBody @Valid final ModifyDoneRequest dto) {
+		return new TodoItemResponse(todoItemService.modifyDone(id, dto));
+	}
 
 	@DeleteMapping(value = "/api/item/delete/{id}")
 	public void delete(@PathVariable final Long id) {

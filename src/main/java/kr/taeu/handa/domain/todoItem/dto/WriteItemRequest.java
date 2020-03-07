@@ -12,24 +12,19 @@ import lombok.Getter;
 
 @Getter
 public class WriteItemRequest {
-	@NotNull
-	private final Member member;
-	
 	@NotEmpty
 	private final String content;
 	
 	private final boolean done;
 
 	@Builder
-	private WriteItemRequest(@NonNull final Member member, @NonNull final String content) {
-		this.member = member;
+	private WriteItemRequest(@NonNull final String content) {
 		this.content = content;
 		this.done = false;
 	}
 
 	public TodoItem toEntity() {
 		return TodoItem.builder()
-				.member(this.member)
 				.content(this.content)
 				.done(this.done)
 				.build();
