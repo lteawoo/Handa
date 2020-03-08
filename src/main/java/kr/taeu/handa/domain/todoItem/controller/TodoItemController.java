@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
@@ -32,8 +34,9 @@ public class TodoItemController {
 	}
 
 	@PostMapping(value = "/api/item/write")
-	public TodoItemResponse write(@RequestBody @Valid final WriteItemRequest dto) {
-		return new TodoItemResponse(todoItemService.write(dto));
+	public TodoItemResponse write(Authentication authentication, @RequestBody @Valid final WriteItemRequest dto) {
+		log.info(authentication.getPrincipal().toString());
+		return new TodoItemResponse(todoItemService.write(Member.builder().build(), dto));
 	}
 
 	@PostMapping(value = "/api/item/modifyContent/{id}")
@@ -51,5 +54,10 @@ public class TodoItemController {
 	@DeleteMapping(value = "/api/item/delete/{id}")
 	public void delete(@PathVariable final Long id) {
 		todoItemService.delete(id);
+	}
+	
+	@GetMapping(value = "/api/item/test")
+	public String test(Authentication authentication) {
+		return authentication.getPrincipal().toString();
 	}
 }
