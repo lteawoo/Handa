@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class TodoItemService {
 	private final TodoItemRepository todoItemRepository;
@@ -37,30 +36,37 @@ public class TodoItemService {
 	}
 
 	@Transactional(readOnly = true)
-	public TodoItem findById(Long id) {
-		final Optional<TodoItem> todoItem = todoItemRepository.findById(id);
-		todoItem.orElseThrow(() -> new TodoItemNotFoundException(id));
+	public TodoItem findByIdAndEmail(Email email, Long id) {
+		Member member = memberDetailsService.findByEmail(email);
+		final Optional<TodoItem> todoItem = todoItemRepository.findByIdAndMember(id, member);
+		todoItem.orElseThrow(() -> new TodoItemNotFoundException(email, id));
 		return todoItem.get();
 	}
 
+	@Transactional
 	public TodoItem write(String username, WriteItemRequest dto) {
 		Member member = memberDetailsService.findByEmail(new Email(username));
 		
 		return todoItemRepository.save(dto.toEntity(member));
 	}
 
-	public TodoItem modifyContent(Long id, ModifyContentRequest dto) {
+	@Transactional
+	public TodoItem modifyContent(String username, Long id, ModifyContentRequest dto) {
+		Member member = memberDetailsService.findByEmail(new Email(username));
+		
 		final TodoItem todoItem = findById(id);
 		todoItem.modifyContent(dto);
 		return todoItem;
 	}
 
+	@Transactional
 	public TodoItem modifyDone(Long id, ModifyDoneRequest dto) {
 		final TodoItem todoItem = findById(id);
 		todoItem.modifyDone(dto);
 		return todoItem;
 	}
 
+	@Transactional
 	public void delete(Long id) {
 		final TodoItem todoItem = findById(id);
 		todoItemRepository.delete(todoItem);

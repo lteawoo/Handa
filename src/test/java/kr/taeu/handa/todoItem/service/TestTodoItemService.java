@@ -67,6 +67,8 @@ public class TestTodoItemService {
 				.password(new Password("12345"))
 				.role(Role.MEMBER)
 				.build();
+		
+		given(this.memberDetailsRepository.findByEmail(any())).willReturn(Optional.of(this.member));
 	}
 
 	private WriteItemRequest buildWriteItemRequest(String content) {
@@ -79,7 +81,6 @@ public class TestTodoItemService {
 	public void 아이템_등록() {
 		// given
 		WriteItemRequest req = buildWriteItemRequest("바나나를 먹어야해");
-		given(this.memberDetailsRepository.findByEmail(any())).willReturn(Optional.of(this.member));
 		given(this.todoItemRepository.save(any())).willReturn(req.toEntity(this.member));
 		
 		// when
@@ -94,20 +95,15 @@ public class TestTodoItemService {
 	@Test
 	public void 아이템_내용_수정() {
 		// given
-		List<TodoItem> list = new ArrayList<TodoItem>();
-		list.add(buildWriteItemRequest("바나나를 먹어야해").toEntity());
-		list.add(buildWriteItemRequest("딸기를 먹어야해").toEntity());
-		list.add(buildWriteItemRequest("호일을 사야해").toEntity());
-		given(this.todoItemRepository.findById(1L)).willReturn(Optional.of(list.get(0)));
-		given(this.todoItemRepository.findById(2L)).willReturn(Optional.of(list.get(1)));
-		given(this.todoItemRepository.findById(3L)).willReturn(Optional.of(list.get(2)));
+		WriteItemRequest req = buildWriteItemRequest("바나나를 먹어야해");
+		given(this.todoItemRepository.save(any())).willReturn(req.toEntity(this.member));
 		
 		ModifyContentRequest dto = ModifyContentRequest.builder()
 				.content("바나나를 먹지말자")
 				.build();
 		
 		// when
-		TodoItem item = this.todoItemService.modifyContent(1L, dto);
+		TodoItem item = this.todoItemService.modifyContent(this.member.getEmail().getValue(), 1L, dto);
 		
 		// then
 		assertEquals("바나나를 먹지말자", item.getContent());

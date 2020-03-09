@@ -103,7 +103,7 @@ public class TestTodoItemRepository {
 		this.todoItemRepository.save(todoItem);
 		
 		// when
-		Optional<TodoItem> finded = this.todoItemRepository.findById(todoItem.getId());
+		Optional<TodoItem> finded = this.todoItemRepository.findByIdAndMember(todoItem.getId(), this.member);
 		TodoItem findedItem = finded.get();
 		
 		// then
