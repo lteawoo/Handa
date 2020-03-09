@@ -21,13 +21,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
+import kr.taeu.handa.domain.member.service.MemberDetailsService;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
@@ -41,9 +44,18 @@ import kr.taeu.handa.global.error.ErrorCode;
 public class TestTodoItemService {
 	@SpyBean
 	private TodoItemService todoItemService;
-
+	
+	@SpyBean
+	private MemberDetailsService memberDetailsService;
+	
+	@MockBean
+	private PasswordEncoder passwordEncoder;
+	
 	@MockBean
 	private TodoItemRepository todoItemRepository;
+	
+	@MockBean
+	private MemberDetailsRepository memberDetailsRepository;
 	
 	private Member member;
 
@@ -67,13 +79,14 @@ public class TestTodoItemService {
 	public void 아이템_등록() {
 		// given
 		WriteItemRequest req = buildWriteItemRequest("바나나를 먹어야해");
-		given(this.todoItemRepository.save(any())).willReturn(req.toEntity());
+		given(this.memberDetailsRepository.findByEmail(any())).willReturn(Optional.of(this.member));
+		given(this.todoItemRepository.save(any())).willReturn(req.toEntity(this.member));
 		
 		// when
-		TodoItem saved = this.todoItemService.write(this.member, req);
+		TodoItem saved = this.todoItemService.write(this.member.getEmail().getValue(), req);
 		
 		// then
-		assertEquals(req.getMember(), this.member);
+		assertEquals(this.member, saved.getMember());
 		assertEquals(req.getContent(), saved.getContent());
 		verify(this.todoItemRepository, only()).save(any());
 	}

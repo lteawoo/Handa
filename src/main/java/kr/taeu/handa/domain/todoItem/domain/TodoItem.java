@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.NonNull;
 
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
@@ -54,7 +55,7 @@ public class TodoItem {
 	private LocalDateTime createdDate; 
 
 	@Builder
-	public TodoItem(Member member, String content, boolean done) {
+	public TodoItem(@NonNull Member member, @NonNull String content, @NonNull boolean done) {
 		this.member = member;
 		this.content = content;
 		this.done = done;

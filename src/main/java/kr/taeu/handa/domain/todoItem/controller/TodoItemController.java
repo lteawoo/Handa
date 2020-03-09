@@ -1,5 +1,6 @@
 package kr.taeu.handa.domain.todoItem.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -34,9 +35,9 @@ public class TodoItemController {
 	}
 
 	@PostMapping(value = "/api/item/write")
-	public TodoItemResponse write(Authentication authentication, @RequestBody @Valid final WriteItemRequest dto) {
-		log.info(authentication.getPrincipal().toString());
-		return new TodoItemResponse(todoItemService.write(Member.builder().build(), dto));
+	public TodoItemResponse write(Principal principal, @RequestBody @Valid final WriteItemRequest dto) {
+		log.info(principal.getName());
+		return new TodoItemResponse(todoItemService.write(principal.getName(), dto));
 	}
 
 	@PostMapping(value = "/api/item/modifyContent/{id}")

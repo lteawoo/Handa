@@ -47,11 +47,16 @@ public class MemberDetailsService implements UserDetailsService {
 
 		return this.memberDetailsRepository.save(cryptedReq.toEntity());
 	}
+	
+	public Member findByEmail(Email email) {
+		Optional<Member> optMember = this.memberDetailsRepository.findByEmail(email);
+		
+		return optMember.orElseThrow(() -> new EmailNotFoundException(email));
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Member> optMember = this.memberDetailsRepository.findByEmail(new Email(username));
-		Member member = optMember.orElseThrow(() -> new EmailNotFoundException(new Email(username)));
+		Member member = findByEmail(new Email(username));
 
 		/*
 		 * 권한 설정 > 예제이므로 멤버당 한개씩이라고 가정함

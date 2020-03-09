@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.taeu.handa.domain.member.domain.Member;
+import kr.taeu.handa.domain.member.domain.model.Email;
+import kr.taeu.handa.domain.member.service.MemberDetailsService;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TodoItemService {
 	private final TodoItemRepository todoItemRepository;
+	private final MemberDetailsService memberDetailsService;
 
 	@Transactional(readOnly = true)
 	public List<TodoItem> list() {
@@ -40,8 +43,10 @@ public class TodoItemService {
 		return todoItem.get();
 	}
 
-	public TodoItem write(Member member, WriteItemRequest dto) {
-		return todoItemRepository.save(dto.toEntity());
+	public TodoItem write(String username, WriteItemRequest dto) {
+		Member member = memberDetailsService.findByEmail(new Email(username));
+		
+		return todoItemRepository.save(dto.toEntity(member));
 	}
 
 	public TodoItem modifyContent(Long id, ModifyContentRequest dto) {

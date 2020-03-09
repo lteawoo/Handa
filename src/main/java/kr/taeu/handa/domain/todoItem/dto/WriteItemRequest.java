@@ -23,8 +23,9 @@ public class WriteItemRequest {
 		this.done = false;
 	}
 
-	public TodoItem toEntity() {
+	public TodoItem toEntity(final Member member) {
 		return TodoItem.builder()
+				.member(member)
 				.content(this.content)
 				.done(this.done)
 				.build();
