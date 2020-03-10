@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,14 +32,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TodoItem {
-	@ManyToOne
-	@JoinColumn(name = "MEMBER_ID", updatable = false, nullable = false)
-	private Member member;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", updatable = false)
 	private Long id;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "MEMBER_ID", updatable = false, nullable = false)
+	private Member member;
 
 	@Column(name = "CONTENT", length = 500, nullable = false)
 	private String content;

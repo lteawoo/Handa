@@ -7,6 +7,6 @@ import kr.taeu.handa.global.error.exception.BusinessException;
 public class TodoItemNotFoundException extends BusinessException {
 
 	public TodoItemNotFoundException(Email email, Long id) {
-		super(email + "'s item id: " + id + " is not found", ErrorCode.OBJECT_NOT_FOUND);
+		super(email.getValue() + "'s item id: " + id + " is not found", ErrorCode.OBJECT_NOT_FOUND);
 	}
 }

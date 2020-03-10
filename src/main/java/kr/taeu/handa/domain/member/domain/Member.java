@@ -1,6 +1,7 @@
 package kr.taeu.handa.domain.member.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +24,7 @@ import kr.taeu.handa.domain.member.domain.model.Email;
 import kr.taeu.handa.domain.member.domain.model.Name;
 import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
+import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +54,9 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private Role role;
+	
+//	@OneToMany(mappedBy = "member")
+//	private List<TodoItem> todoItems;
 	
 	@Column(name = "LAST_MODIFIED_DATE")
 	@LastModifiedDate

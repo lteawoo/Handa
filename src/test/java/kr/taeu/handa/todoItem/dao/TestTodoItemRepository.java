@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,10 +24,13 @@ import kr.taeu.handa.domain.member.domain.model.Password;
 import kr.taeu.handa.domain.member.domain.model.Role;
 import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
-@EnableJpaAuditing
+//@DataJpaTest
+@SpringBootTest
+//@EnableJpaAuditing
 public class TestTodoItemRepository {
 	@Autowired
 	private TodoItemRepository todoItemRepository;
@@ -93,6 +97,31 @@ public class TestTodoItemRepository {
 	}
 	
 	@Test
+	public void 아이템_전체_조회() {
+		// given
+		TodoItem todoItem1 = TodoItem.builder()
+				.member(this.member)
+				.content("바나나를 먹자")
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem1);
+		TodoItem todoItem2 = TodoItem.builder()
+				.member(this.member)
+				.content("딸기를 먹자")
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem2);
+		
+		List<TodoItem> list = this.todoItemRepository.findAllByMember(this.member);
+		
+		for(TodoItem item : list) {
+			log.info(item.getContent());
+		}
+		
+		assertTrue(list.size() == 2);
+	}
+	
+	@Test
 	public void 아이템_조회() {
 		// given
 		TodoItem todoItem = TodoItem.builder()
@@ -108,7 +137,6 @@ public class TestTodoItemRepository {
 		
 		// then
 		assertTrue(this.todoItemRepository.existsById(findedItem.getId()));
-		assertEquals(this.member, findedItem.getMember());
 		assertEquals(todoItem.getContent(), findedItem.getContent());
 		assertEquals(todoItem.isDone(), findedItem.isDone());
 	}

@@ -26,11 +26,12 @@ public class TodoItemService {
 	private final MemberDetailsService memberDetailsService;
 
 	@Transactional(readOnly = true)
-	public List<TodoItem> list() {
-		List<TodoItem> todoItemList = (List<TodoItem>) todoItemRepository.findAll();
-		todoItemList.forEach(item -> {
-			log.info(item.toString());
-		});
+	public List<TodoItem> list(String username) {
+		Member member = memberDetailsService.findByEmail(new Email(username));
+		List<TodoItem> todoItemList = (List<TodoItem>) todoItemRepository.findAllByMember(member);
+//		todoItemList.forEach(item -> {
+//			log.info(item.toString());
+//		});
 
 		return todoItemList;
 	}
@@ -40,6 +41,7 @@ public class TodoItemService {
 		Member member = memberDetailsService.findByEmail(email);
 		final Optional<TodoItem> todoItem = todoItemRepository.findByIdAndMember(id, member);
 		todoItem.orElseThrow(() -> new TodoItemNotFoundException(email, id));
+		
 		return todoItem.get();
 	}
 
@@ -52,23 +54,24 @@ public class TodoItemService {
 
 	@Transactional
 	public TodoItem modifyContent(String username, Long id, ModifyContentRequest dto) {
-		Member member = memberDetailsService.findByEmail(new Email(username));
+		final TodoItem todoItem = this.findByIdAndEmail(new Email(username), id);
 		
-		final TodoItem todoItem = findById(id);
 		todoItem.modifyContent(dto);
 		return todoItem;
 	}
 
 	@Transactional
-	public TodoItem modifyDone(Long id, ModifyDoneRequest dto) {
-		final TodoItem todoItem = findById(id);
+	public TodoItem modifyDone(String username, Long id, ModifyDoneRequest dto) {
+		final TodoItem todoItem = this.findByIdAndEmail(new Email(username), id);
+		
 		todoItem.modifyDone(dto);
 		return todoItem;
 	}
 
 	@Transactional
-	public void delete(Long id) {
-		final TodoItem todoItem = findById(id);
+	public void delete(String username, Long id) {
+		final TodoItem todoItem = this.findByIdAndEmail(new Email(username), id);
+		
 		todoItemRepository.delete(todoItem);
 	}
 }

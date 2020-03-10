@@ -2,6 +2,7 @@ package kr.taeu.handa.domain.todoItem.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -30,8 +31,11 @@ public class TodoItemController {
 	private final TodoItemService todoItemService;
 
 	@GetMapping(value = "/api/item/list")
-	public List<TodoItem> list() {
-		return todoItemService.list();
+	public List<TodoItemResponse> list(Principal principal) {
+		List<TodoItemResponse> list = todoItemService.list(principal.getName()).stream()
+				.map(item -> new TodoItemResponse(item))
+				.collect(Collectors.toList());
+		return list;
 	}
 
 	@PostMapping(value = "/api/item/write")
@@ -41,20 +45,20 @@ public class TodoItemController {
 	}
 
 	@PostMapping(value = "/api/item/modifyContent/{id}")
-	public TodoItemResponse modifyContent(@PathVariable final Long id,
+	public TodoItemResponse modifyContent(Principal principal, @PathVariable final Long id,
 			@RequestBody @Valid final ModifyContentRequest dto) {
-		return new TodoItemResponse(todoItemService.modifyContent(id, dto));
+		return new TodoItemResponse(todoItemService.modifyContent(principal.getName(), id, dto));
 	}
 
 	@PostMapping(value = "/api/item/modifyDone/{id}")
-	public TodoItemResponse modifyDone(@PathVariable final Long id,
+	public TodoItemResponse modifyDone(Principal principal, @PathVariable final Long id,
 			@RequestBody @Valid final ModifyDoneRequest dto) {
-		return new TodoItemResponse(todoItemService.modifyDone(id, dto));
+		return new TodoItemResponse(todoItemService.modifyDone(principal.getName(), id, dto));
 	}
 
 	@DeleteMapping(value = "/api/item/delete/{id}")
-	public void delete(@PathVariable final Long id) {
-		todoItemService.delete(id);
+	public void delete(Principal principal, @PathVariable final Long id) {
+		todoItemService.delete(principal.getName(), id);
 	}
 	
 	@GetMapping(value = "/api/item/test")
