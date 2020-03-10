@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyContentRequest {
 	@NotEmpty
 	private String content;
