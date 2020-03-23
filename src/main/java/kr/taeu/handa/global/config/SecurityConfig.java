@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/member/signup", "/member/signin").anonymous()
+				.antMatchers("/member/signup", "/member/signin", "/member/test").anonymous()
 				.anyRequest().authenticated()
 			.and()
 				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())

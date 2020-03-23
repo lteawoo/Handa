@@ -20,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberController {
 	private final MemberDetailsService memberDetailsService;
+	
+	@GetMapping("/test")
+	public String test() {
+		return "hello world";
+	}
 
 	@GetMapping("/welcome")
 	public String welcome(Authentication authentication) {
