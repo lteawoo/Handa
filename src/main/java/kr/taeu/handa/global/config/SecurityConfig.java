@@ -8,6 +8,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import kr.taeu.handa.global.security.rest.RestAuthenticationEntryPoint;
 import kr.taeu.handa.global.security.rest.RestAuthenticationFailuerHandler;
@@ -33,16 +37,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return restAuthenticationFilter;
 	}
 
+	/*
+	 * CORS 설정
+	 */
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedOrigin("*");
+		configuration.addAllowedMethod("*");
+		configuration.addAllowedHeader("*");
+		configuration.setAllowCredentials(true);
+		configuration.setMaxAge(3600L);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/member/signup", "/member/signin", "/member/test").anonymous()
+				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+				.antMatchers("/member/signup", "/member/signin").anonymous()
+				.antMatchers("/member/test").permitAll()
 				.anyRequest().authenticated()
+			.and()
+				.cors()
+			
 			.and()
 				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
 			.and()
 				.formLogin().disable()
-				.csrf().disable();
+				.csrf().disable()
+				.httpBasic().disable();
 	}
 
 	@Override
