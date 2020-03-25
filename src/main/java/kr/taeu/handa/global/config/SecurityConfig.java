@@ -57,9 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-				.antMatchers("/member/signup", "/member/signin").anonymous()
-				.antMatchers("/member/test").permitAll()
-				.anyRequest().authenticated()
+//				.antMatchers("/member/signup", "/member/signin").anonymous()
+//				.antMatchers("/member/test").permitAll()
+				.antMatchers("/api/**").authenticated()
 			.and()
 				.cors()
 			
