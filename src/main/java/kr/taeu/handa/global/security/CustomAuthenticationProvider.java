@@ -13,7 +13,6 @@ import kr.taeu.handa.domain.member.exception.InvalidPasswordException;
 import kr.taeu.handa.domain.member.service.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private final MemberDetailsService memberDetailsService;
