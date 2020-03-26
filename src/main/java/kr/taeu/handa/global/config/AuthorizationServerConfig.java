@@ -69,7 +69,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		source.registerCorsConfiguration("/oauth/**", configuration);
 		CorsFilter corsFilter = new CorsFilter(source);
 		security.addTokenEndpointAuthenticationFilter(corsFilter);
+		
 		security.realm(REALM + "/client");
+		security.tokenKeyAccess("permitAll()");
+		security.checkTokenAccess("isAuthenticated()");
 	}
 
 	@Override
