@@ -23,6 +23,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 				.antMatchers("/member/signup", "/member/signin").anonymous()
 				.antMatchers("/member/test").permitAll()
 				.antMatchers("/member/**").authenticated();
+		
+		/*
+		 * .authorizeRequests()
+		 * .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() .and()
+		 */
 	}
 
 }
