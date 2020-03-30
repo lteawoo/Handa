@@ -29,5 +29,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		 * .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() .and()
 		 */
 	}
-
 }

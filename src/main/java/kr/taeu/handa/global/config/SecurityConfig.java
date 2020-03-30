@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import kr.taeu.handa.domain.member.service.MemberDetailsService;
 import kr.taeu.handa.global.security.CustomAuthenticationProvider;
@@ -60,17 +61,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/*
 	 * CORS 설정
 	 */
+	/*
+	 * @Bean public CorsConfigurationSource corsConfigurationSource() {
+	 * CorsConfiguration configuration = new CorsConfiguration();
+	 * configuration.addAllowedOrigin("*"); configuration.addAllowedMethod("*");
+	 * configuration.addAllowedHeader("*"); configuration.setAllowCredentials(true);
+	 * configuration.setMaxAge(3600L); UrlBasedCorsConfigurationSource source = new
+	 * UrlBasedCorsConfigurationSource(); source.registerCorsConfiguration("/**",
+	 * configuration); return source; }
+	 */
+	
+
 	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("*");
-		configuration.addAllowedMethod("*");
-		configuration.addAllowedHeader("*");
-		configuration.setAllowCredentials(true);
-		configuration.setMaxAge(3600L);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
+	public CorsFilter corsFilter() {
+	  final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+	  final CorsConfiguration corsConfiguration = new CorsConfiguration();
+	  corsConfiguration.setAllowCredentials(true);
+	  corsConfiguration.addAllowedOrigin("*");
+	  corsConfiguration.addAllowedHeader("*");
+	  corsConfiguration.addAllowedMethod("*");
+	  urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+	  return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
 
 	@Override
