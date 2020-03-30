@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 public class AppConfig {
@@ -24,5 +25,16 @@ public class AppConfig {
 				new WebServlet());
 		registrationBean.addUrlMappings("/h2-console/*");
 		return registrationBean;
+	}
+	
+	@Bean
+	public CommonsRequestLoggingFilter requestLoggingFilter() {
+	    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+	    loggingFilter.setIncludeClientInfo(true);
+	    loggingFilter.setIncludeQueryString(true);
+	    loggingFilter.setIncludePayload(true);
+	    loggingFilter.setIncludeHeaders(true);
+	    loggingFilter.setMaxPayloadLength(64000);
+	    return loggingFilter;
 	}
 }
