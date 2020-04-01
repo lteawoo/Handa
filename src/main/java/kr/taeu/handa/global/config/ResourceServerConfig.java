@@ -19,14 +19,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	public void configure(HttpSecurity http) throws Exception {
 		http.requestMatchers()
 				.antMatchers("/member/**")
+				.antMatchers("/api/**")
 			.and().authorizeRequests()
 				.antMatchers("/member/signup", "/member/signin").anonymous()
 				.antMatchers("/member/test").permitAll()
-				.antMatchers("/member/**").authenticated();
-		
-		/*
-		 * .authorizeRequests()
-		 * .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() .and()
-		 */
+				.antMatchers("/member/**").authenticated()
+				
+				.antMatchers("/api/**").authenticated();
 	}
 }
