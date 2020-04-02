@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +20,6 @@ import org.springframework.lang.NonNull;
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
-import kr.taeu.handa.domain.todoItem.dto.ModifyOrderRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,8 +46,8 @@ public class TodoItem {
 	@Column(name = "DONE", nullable = false)
 	private boolean done;
 	
-	@Column(name= "ORDER", nullable = false)
-	private Integer order;
+	@Column(name= "ORDER")
+	private Double order;
 
 	@Column(name = "LAST_MODIFIED_DATE")
 	@LastModifiedDate
@@ -60,7 +58,7 @@ public class TodoItem {
 	private LocalDateTime createdDate; 
 
 	@Builder
-	public TodoItem(@NonNull Member member, @NonNull String content, @NonNull boolean done, @NonNull Integer order) {
+	public TodoItem(@NonNull Member member, @NonNull String content, @NonNull boolean done, @NonNull Double order) {
 		this.member = member;
 		this.content = content;
 		this.done = done;
@@ -73,9 +71,5 @@ public class TodoItem {
 
 	public void modifyDone(ModifyDoneRequest dto) {
 		this.done = dto.isDone();
-	}
-	
-	public void modifyOrder(ModifyOrderRequest dto) {
-		this.order = dto.getOrder();
 	}
 }

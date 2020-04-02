@@ -74,4 +74,9 @@ public class TodoItemService {
 		
 		todoItemRepository.delete(todoItem);
 	}
+	
+	@Transactional
+	public List<TodoItem> changeOrder(String username, Double fromOrder, Double toOrder) {
+		return null;
+	}
 }
