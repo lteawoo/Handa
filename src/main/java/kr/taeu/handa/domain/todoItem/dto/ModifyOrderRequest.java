@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyOrderRequest {
 	@NotNull
-	private Integer order;
+	private Double order;
 	
 	@Builder
-	public ModifyOrderRequest(@NonNull Integer order) {
+	public ModifyOrderRequest(@NonNull Double order) {
 		this.order = order;
 	}
 

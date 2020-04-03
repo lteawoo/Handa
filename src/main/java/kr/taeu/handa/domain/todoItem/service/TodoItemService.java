@@ -76,7 +76,7 @@ public class TodoItemService {
 	}
 	
 	@Transactional
-	public List<TodoItem> changeOrder(String username, Double fromOrder, Double toOrder) {
+	public List<TodoItem> changeOrder(String username, Long fromId) {
 		return null;
 	}
 }

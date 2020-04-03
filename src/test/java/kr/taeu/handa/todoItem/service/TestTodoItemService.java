@@ -164,14 +164,29 @@ public class TestTodoItemService {
 		//5번째 아이템을 2번째로 옮기는 경우
 		//부동소숫점을 이용하즈아!!
 		// given
-		Double to = 2.0;
-		Double from = 5.0;
+		Double to = 2000.0;
+		Double from = 5000.0;
 		List<TodoItem> list = new ArrayList<TodoItem>();
-		list.add(buildWriteItemRequest("1:바나나를 먹어야해").toEntity(this.member));
-		list.add(buildWriteItemRequest("2:딸기를 먹어야해").toEntity(this.member));
-		list.add(buildWriteItemRequest("3:호일을 사야해").toEntity(this.member));
-		list.add(buildWriteItemRequest("4:감자를 사야해").toEntity(this.member));
-		list.add(buildWriteItemRequest("5:고구마를 사야해").toEntity(this.member));
+		list.add(TodoItem.builder()
+				.content("1.바나나를 먹어야해")
+				.order(1000.0)
+				.build());
+		list.add(TodoItem.builder()
+				.content("2:딸기를 먹어야해")
+				.order(2000.0)
+				.build());
+		list.add(TodoItem.builder()
+				.content("3:호일을 사야해")
+				.order(3000.0)
+				.build());
+		list.add(TodoItem.builder()
+				.content("4:감자를 사야해")
+				.order(4000.0)
+				.build());
+		list.add(TodoItem.builder()
+				.content("5:고구마를 사야해")
+				.order(5000.0)
+				.build());
 		
 		// when
 		todoItemService.changeOrder(this.member.getEmail().getValue(), from, to);
