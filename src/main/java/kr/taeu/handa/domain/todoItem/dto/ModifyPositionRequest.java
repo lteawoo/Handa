@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ModifyOrderRequest {
+public class ModifyPositionRequest {
 	@NotNull
-	private Double order;
+	private Double position;
 	
 	@Builder
-	public ModifyOrderRequest(@NonNull Double order) {
-		this.order = order;
+	public ModifyPositionRequest(@NonNull Double position) {
+		this.position = position;
 	}
 
 	public TodoItem toEntity() {
 		return TodoItem.builder()
-				.order(this.order)
+				.position(this.position)
 				.build();
 	}
 }
