@@ -11,9 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import kr.taeu.handa.domain.member.dao.MemberDetailsRepository;
@@ -102,17 +100,19 @@ public class TestTodoItemRepository {
 		TodoItem todoItem1 = TodoItem.builder()
 				.member(this.member)
 				.content("바나나를 먹자")
+				.position(3000.0)
 				.done(false)
 				.build();
 		this.todoItemRepository.save(todoItem1);
 		TodoItem todoItem2 = TodoItem.builder()
 				.member(this.member)
 				.content("딸기를 먹자")
+				.position(2000.0)
 				.done(false)
 				.build();
 		this.todoItemRepository.save(todoItem2);
 		
-		List<TodoItem> list = this.todoItemRepository.findAllByMember(this.member);
+		List<TodoItem> list = this.todoItemRepository.findAllByMemberOrderByPosition(this.member);
 		
 		for(TodoItem item : list) {
 			log.info(item.getContent());
@@ -156,5 +156,31 @@ public class TestTodoItemRepository {
 		
 		// then
 		assertTrue(!this.todoItemRepository.existsById(todoItem.getId()));
+	}
+	
+	
+	@Test
+	public void Position최대값조회() {
+		// given
+		TodoItem todoItem = TodoItem.builder()
+				.member(this.member)
+				.content("바나나를 먹자")
+				.position(1000.0)
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem);
+		todoItem = TodoItem.builder()
+				.member(this.member)
+				.content("딸기를 먹자")
+				.position(2000.0)
+				.done(false)
+				.build();
+		this.todoItemRepository.save(todoItem);
+		
+		// when
+		Double max = this.todoItemRepository.findMaxPosition(member);
+		
+		// then
+		assertEquals(2000.0, max);
 	}
 }

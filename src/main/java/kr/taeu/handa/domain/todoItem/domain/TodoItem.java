@@ -20,12 +20,13 @@ import org.springframework.lang.NonNull;
 import kr.taeu.handa.domain.member.domain.Member;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyPositionRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "TODOITEM")
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "TODOITEM")
 @Getter
@@ -46,8 +47,8 @@ public class TodoItem {
 	@Column(name = "DONE", nullable = false)
 	private boolean done;
 	
-	@Column(name= "ORDER")
-	private Double order;
+	@Column(name= "POSITION")
+	private Double position;
 
 	@Column(name = "LAST_MODIFIED_DATE")
 	@LastModifiedDate
@@ -58,11 +59,11 @@ public class TodoItem {
 	private LocalDateTime createdDate; 
 
 	@Builder
-	public TodoItem(@NonNull Member member, @NonNull String content, @NonNull boolean done, @NonNull Double order) {
+	public TodoItem(@NonNull Member member, @NonNull String content, @NonNull boolean done, @NonNull Double position) {
 		this.member = member;
 		this.content = content;
 		this.done = done;
-		this.order = order;
+		this.position = position;
 	}
 
 	public void modifyContent(ModifyContentRequest dto) {
@@ -71,5 +72,9 @@ public class TodoItem {
 
 	public void modifyDone(ModifyDoneRequest dto) {
 		this.done = dto.isDone();
+	}
+	
+	public void modifyPosition(ModifyPositionRequest dto) {
+		this.position = dto.getPosition();
 	}
 }

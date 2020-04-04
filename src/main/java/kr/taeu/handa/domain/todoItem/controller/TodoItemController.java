@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.taeu.handa.domain.member.domain.Member;
-import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyPositionRequest;
 import kr.taeu.handa.domain.todoItem.dto.TodoItemResponse;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
@@ -54,6 +53,12 @@ public class TodoItemController {
 	public TodoItemResponse modifyDone(Principal principal, @PathVariable final Long id,
 			@RequestBody @Valid final ModifyDoneRequest dto) {
 		return new TodoItemResponse(todoItemService.modifyDone(principal.getName(), id, dto));
+	}
+	
+	@PostMapping(value = "/api/item/modifyPosition/{id}")
+	public TodoItemResponse modifyPosition(Principal principal, @PathVariable final Long id,
+			@RequestBody @Valid final ModifyPositionRequest dto) {
+		return new TodoItemResponse(todoItemService.changePosition(principal.getName(), id, dto));
 	}
 
 	@DeleteMapping(value = "/api/item/delete/{id}")

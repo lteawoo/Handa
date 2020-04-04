@@ -34,6 +34,7 @@ import kr.taeu.handa.domain.todoItem.dao.TodoItemRepository;
 import kr.taeu.handa.domain.todoItem.domain.TodoItem;
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
+import kr.taeu.handa.domain.todoItem.dto.ModifyPositionRequest;
 import kr.taeu.handa.domain.todoItem.dto.WriteItemRequest;
 import kr.taeu.handa.domain.todoItem.exception.TodoItemNotFoundException;
 import kr.taeu.handa.domain.todoItem.service.TodoItemService;
@@ -82,15 +83,17 @@ public class TestTodoItemService {
 	public void 아이템_등록() {
 		// given
 		WriteItemRequest req = buildWriteItemRequest("바나나를 먹어야해");
+		req.setPosition(1000.0);
+		given(this.todoItemRepository.findMaxPosition(any())).willReturn(req.getPosition());
 		given(this.todoItemRepository.save(any())).willReturn(req.toEntity(this.member));
 		
 		// when
 		TodoItem saved = this.todoItemService.write(this.member.getEmail().getValue(), req);
-		
+
 		// then
 		assertEquals(this.member, saved.getMember());
 		assertEquals(req.getContent(), saved.getContent());
-		verify(this.todoItemRepository, only()).save(any());
+		verify(this.todoItemRepository, atLeastOnce()).save(any());
 	}
 	
 	@Test
@@ -166,29 +169,48 @@ public class TestTodoItemService {
 		// given
 		Double to = 2000.0;
 		Double from = 5000.0;
+		ModifyPositionRequest req = ModifyPositionRequest.builder()
+				.position(1500.0)
+				.build();
 		List<TodoItem> list = new ArrayList<TodoItem>();
 		list.add(TodoItem.builder()
 				.content("1.바나나를 먹어야해")
-				.order(1000.0)
+				.position(1000.0)
 				.build());
 		list.add(TodoItem.builder()
 				.content("2:딸기를 먹어야해")
-				.order(2000.0)
+				.position(2000.0)
 				.build());
 		list.add(TodoItem.builder()
 				.content("3:호일을 사야해")
-				.order(3000.0)
+				.position(3000.0)
 				.build());
 		list.add(TodoItem.builder()
 				.content("4:감자를 사야해")
-				.order(4000.0)
+				.position(4000.0)
 				.build());
 		list.add(TodoItem.builder()
 				.content("5:고구마를 사야해")
-				.order(5000.0)
+				.position(5000.0)
 				.build());
+		given(this.todoItemRepository.findByIdAndMember(anyLong(), any())).willReturn(Optional.of(req.toEntity()));
 		
 		// when
-		todoItemService.changeOrder(this.member.getEmail().getValue(), from, to);
+		TodoItem todoItem = todoItemService.changePosition(this.member.getEmail().getValue(), 5L, req);
+		
+		// then
+		assertEquals(1500.0, todoItem.getPosition());
+	}
+	
+	@Test
+	public void 다음_순서_조회() {
+		Double position = 1062.5;
+		Double nextPosition = 0.0;
+		if(position == 0.0) {
+			nextPosition = 1000.0;
+		} else {
+			nextPosition = (Math.floor(position / 1000.0) + 1) * 1000.0;
+		}
+		log.debug("pos " + nextPosition);
 	}
 }
