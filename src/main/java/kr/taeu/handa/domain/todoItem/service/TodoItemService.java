@@ -96,10 +96,6 @@ public class TodoItemService {
 	@Transactional
 	public TodoItem changePosition(String username, Long id, ModifyPositionRequest dto) {
 		final TodoItem todoItem = this.findByIdAndEmail(new Email(username), id);
-		//TODO 동일한 order로 요청이 들어온경우..(모바일-웹 동시에?..)
-//		final Member member = memberDetailsService.findByEmail(new Email(username));
-//		
-//		final Optional<TodoItem> temp = todoItemRepository.findByPositionAndMember(dto.getPosition(), member);
 		
 		todoItem.modifyPosition(dto);
 		return todoItem;
