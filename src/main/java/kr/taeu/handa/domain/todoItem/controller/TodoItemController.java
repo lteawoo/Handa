@@ -69,4 +69,9 @@ public class TodoItemController {
 	public void delete(Principal principal, @PathVariable final Long id) {
 		todoItemService.delete(principal.getName(), id);
 	}
+	
+	@GetMapping(value = "/api/item/test")
+	public String longPollingTest(Principal principal) {
+		return "롱폴링 응답이닷 : " + principal.getName();
+	}
 }
