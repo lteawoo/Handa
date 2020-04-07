@@ -1,18 +1,21 @@
 package kr.taeu.handa.domain.todoItem.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.security.core.Authentication;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import kr.taeu.handa.domain.todoItem.dto.ModifyContentRequest;
 import kr.taeu.handa.domain.todoItem.dto.ModifyDoneRequest;
@@ -27,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class TodoItemController {
+	private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();	
 	private final TodoItemService todoItemService;
 
 	@GetMapping(value = "/api/item/list")
@@ -64,10 +68,5 @@ public class TodoItemController {
 	@DeleteMapping(value = "/api/item/delete/{id}")
 	public void delete(Principal principal, @PathVariable final Long id) {
 		todoItemService.delete(principal.getName(), id);
-	}
-	
-	@GetMapping(value = "/api/item/test")
-	public String test(Authentication authentication) {
-		return authentication.getPrincipal().toString();
 	}
 }
