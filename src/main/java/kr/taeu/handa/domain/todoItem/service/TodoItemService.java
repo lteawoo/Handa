@@ -1,5 +1,6 @@
 package kr.taeu.handa.domain.todoItem.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +30,16 @@ public class TodoItemService {
 	@Transactional(readOnly = true)
 	public List<TodoItem> list(String username) {
 		Member member = memberDetailsService.findByEmail(new Email(username));
-		List<TodoItem> todoItemList = (List<TodoItem>) todoItemRepository.findAllByMemberOrderByPosition(member);
-//		todoItemList.forEach(item -> {
-//			log.info(item.toString());
-//		});
+		List<TodoItem> todoItemList = todoItemRepository.findByMemberOrderByPosition(member);
 
+		return todoItemList;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<TodoItem> changedList(String username, LocalDateTime lastModifiedDate) {
+		Member member = memberDetailsService.findByEmail(new Email(username));
+		List<TodoItem> todoItemList = todoItemRepository.findByMemberAndLastModifiedDateGreaterThanEqual(member, lastModifiedDate);
+		
 		return todoItemList;
 	}
 
@@ -55,6 +61,18 @@ public class TodoItemService {
 			nextPosition = 1000.0;
 		} else {
 			nextPosition = (Math.floor(position / 1000.0) + 1) * 1000.0;
+		}
+		
+		return nextPosition;
+	}
+	
+	@Transactional(readOnly = true)
+	private Double checkDupAndReturnPosition(final Member member, final Double reqPosition) {
+		Double nextPosition = reqPosition;
+		final boolean isDup = todoItemRepository.existsByPositionAndMember(reqPosition, member);
+		
+		if(isDup) {
+			nextPosition = reqPosition + 1;
 		}
 		
 		return nextPosition;
@@ -94,10 +112,15 @@ public class TodoItemService {
 	}
 	
 	@Transactional
-	public TodoItem changePosition(String username, Long id, ModifyPositionRequest dto) {
+	public TodoItem changePosition(final String username, final Long id, final ModifyPositionRequest dto) {
 		final TodoItem todoItem = this.findByIdAndEmail(new Email(username), id);
+		final Member member = todoItem.getMember();
 		
-		todoItem.modifyPosition(dto);
+		final ModifyPositionRequest reDto = ModifyPositionRequest.builder()
+				.position(checkDupAndReturnPosition(member, dto.getPosition()))
+				.build();
+		
+		todoItem.modifyPosition(reDto);
 		return todoItem;
 	}
 }

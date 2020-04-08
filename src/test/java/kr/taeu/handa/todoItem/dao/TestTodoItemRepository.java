@@ -112,7 +112,7 @@ public class TestTodoItemRepository {
 				.build();
 		this.todoItemRepository.save(todoItem2);
 		
-		List<TodoItem> list = this.todoItemRepository.findAllByMemberOrderByPosition(this.member);
+		List<TodoItem> list = this.todoItemRepository.findByMemberOrderByPosition(this.member);
 		
 		for(TodoItem item : list) {
 			log.info(item.getContent());

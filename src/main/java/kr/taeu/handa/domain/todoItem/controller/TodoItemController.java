@@ -1,14 +1,14 @@
 package kr.taeu.handa.domain.todoItem.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.context.event.EventListener;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +36,16 @@ public class TodoItemController {
 	@GetMapping(value = "/api/item/list")
 	public List<TodoItemResponse> list(Principal principal) {
 		List<TodoItemResponse> list = todoItemService.list(principal.getName()).stream()
+				.map(item -> new TodoItemResponse(item))
+				.collect(Collectors.toList());
+		return list;
+	}
+	
+	@GetMapping(value = "/api/item/changedList/{lastModifiedDate}")
+	public List<TodoItemResponse> changedList(Principal principal
+			, @PathVariable @DateTimeFormat(pattern="yyyyMMdd'T'HHmmss") final LocalDateTime lastModifiedDate) {	
+		log.info(lastModifiedDate.toString());
+		List<TodoItemResponse> list = todoItemService.changedList(principal.getName(), lastModifiedDate).stream()
 				.map(item -> new TodoItemResponse(item))
 				.collect(Collectors.toList());
 		return list;
@@ -68,10 +78,5 @@ public class TodoItemController {
 	@DeleteMapping(value = "/api/item/delete/{id}")
 	public void delete(Principal principal, @PathVariable final Long id) {
 		todoItemService.delete(principal.getName(), id);
-	}
-	
-	@GetMapping(value = "/api/item/test")
-	public String longPollingTest(Principal principal) {
-		return "롱폴링 응답이닷 : " + principal.getName();
 	}
 }

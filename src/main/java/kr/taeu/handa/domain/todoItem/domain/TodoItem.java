@@ -47,7 +47,7 @@ public class TodoItem {
 	@Column(name = "DONE", nullable = false)
 	private boolean done;
 	
-	@Column(name= "POSITION")
+	@Column(name= "POSITION", nullable = false)
 	private Double position;
 
 	@Column(name = "LAST_MODIFIED_DATE")
