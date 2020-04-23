@@ -82,7 +82,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			.authorizedGrantTypes("authorization_code", "password", "refresh_token", "client_credentials")
 			.scopes("read", "write")
 			.secret(passwordEncoder.encode("taeu_secret"))
-			.accessTokenValiditySeconds(12000)
+			.accessTokenValiditySeconds(60)
 			.refreshTokenValiditySeconds(600);
 	}
 
