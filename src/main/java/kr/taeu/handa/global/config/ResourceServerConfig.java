@@ -21,7 +21,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		http.requestMatchers()
 				.antMatchers("/member/**", "/api/**")
 			.and().authorizeRequests()
-				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll() 	
 				.antMatchers("/member/signup", "/member/signin").anonymous()
 				.antMatchers("/member/test").permitAll()
 				.antMatchers("/member/**").authenticated()
